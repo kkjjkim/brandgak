@@ -275,6 +275,18 @@
 - **가장 큰 누수**: 진단 완료 5명 → 폼 입력 시작 2명 → 실제 제출 0. 진단 결과 화면 안의 폼에서 멈춘다(`components/diagnosis-wizard.tsx` 하단 LeadForm). 다음 코드 작업 1순위 후보.
 - Aside 지시서 3 작성: iCloud `사업마켓/브랜드각/Aside-작업지시서-3.md` (네이버 유입어·수집 확인, 미색인 5개 URL 색인 요청, 도용 페이지 확인, 진단 손님 매개변수).
 
+### 2026-10-26 (월, 자동 실행)
+- **수치**: 서치콘솔·GA4 **확인 못 함** — 3번째로 Chrome 접근 승인이 5분 대기 후 막힘(서치콘솔 첫 접속에서 멈춰 GA4는 시도 안 함).
+  신청(최근 30일 API) **0건**. 상태: 주요 5페이지 200, /api/health unauthorized(정상).
+  참고(10/21 실측): 28일 클릭 2·노출 115·18.9위, 세션 120, 진단 완료 5명 → 폼 시작 2명 → 제출 0.
+- **가장 큰 누수(관찰)**: 노출 부족이 1순위. 진단→폼 누수는 10/22에 고쳤고 효과(form_view·form_submit)는 데이터를 못 읽어 미확인.
+- **이번 주 한 일**: 이미 10위 안인 검색어 글 2편에 summary·faq(본문 사실만)·updated 10/26 —
+  가게 이름 짓기(store-naming, "매장이름" 7.0위·네이버 모바일 21뷰), 배달전문점 주방(delivery-kitchen-layout, "배달전문점주방" 3.0위,
+  키워드 "배달전문점 주방" 추가, 글 끝에 진단·배달전문점 창업 글 링크가 없던 것 추가). 예약 글은 10/27~11/27 10편 남아 보충 불필요.
+- **다음 주 볼 것**: 서치콘솔 4개 보강 검색어(12.5·10.1·18.8·16.2위)와 이번 2편 클릭률, GA4 diagnosis_complete → form_view → form_start → form_submit,
+  빙 `site:brandgak.com`. **11월 말 다음 글 묶음(11/27 이후) 작성.**
+  **대표님께**: Chrome의 Claude 확장에서 search.google.com·analytics.google.com 을 '항상 허용'으로 해 주셔야 무인 점검이 데이터를 읽습니다.
+
 ## 다음 할 것 (운영자/대표님)
 - [ ] Supabase 프로젝트 생성 → `supabase/schema.sql` 실행 → `.env.local` 에 URL/anon 키 입력
 - [ ] Resend 가입 → 도메인 인증 → `RESEND_API_KEY`, `LEAD_NOTIFY_TO`, `LEAD_NOTIFY_FROM` 입력
