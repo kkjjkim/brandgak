@@ -88,11 +88,22 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(apiKey);
 
   // 1) 명단에 추가. 이미 있으면 Resend 가 오류를 주는데, 메일은 그래도 보낸다(다시 받고 싶어 눌렀을 수 있다).
-  const audienceId = process.env.RESEND_AUDIENCE_ID || site.resendAudienceId;
-  if (audienceId) {
+  // SDK 4.x 의 contacts.create 는 옛 주소(/audiences/{id}/contacts)를 불러 지금 Resend(세그먼트 방식)에서는 등록이 안 된다
+  // (10/27 운영 시험: 메일은 가고 명단은 비어 있었음) → 새 주소 POST /contacts 를 직접 부른다.
+  const segmentId = process.env.RESEND_AUDIENCE_ID || site.resendAudienceId;
+  if (segmentId) {
     try {
-      const r = await resend.contacts.create({ audienceId, email, unsubscribed: false });
-      if (r.error) console.warn("체크리스트 명단 추가 실패:", r.error.message, source || "");
+      const r = await fetch("https://api.resend.com/contacts", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          unsubscribed: false,
+          segments: [{ id: segmentId }],
+          properties: { source: source || "" },
+        }),
+      });
+      if (!r.ok) console.warn("체크리스트 명단 추가 실패:", r.status, (await r.text()).slice(0, 200));
     } catch (err) {
       console.warn("체크리스트 명단 추가 오류:", err);
     }
