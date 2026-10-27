@@ -3,7 +3,9 @@ import { buttonVariants } from "@/components/ui/button";
 
 // 서브 페이지 끝마다 두는 신청 진입점 (모든 페이지에 "무료 상담" 진입점).
 // 전환 핵심이라 모션으로 숨기지 않고 항상 노출한다. 홈 첫 화면의 저녁 장면으로 이야기를 닫는다.
-export function CtaSection() {
+// offer: "무료 상담"이라는 막연한 말 대신, 지금 읽은 글의 상황에서 바로 받을 수 있는 구체적인 것 한 줄
+// (2026-10-27 대표: "상담 문의를 적극적으로 하게 만들어야" → 글마다 제안을 구체화). 없으면 기본 문구.
+export function CtaSection({ offer }: { offer?: string } = {}) {
   return (
     <section className="relative isolate overflow-hidden bg-foreground text-background">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -25,8 +27,13 @@ export function CtaSection() {
             공사 전에 정해집니다.
           </h2>
           <p className="mt-6 max-w-lg text-[1.0625rem] leading-[1.8] text-background/75">
-            머릿속 구상만 들고 오세요. 자리·예산·컨셉부터 같이 잡고, 진행 여부는 그다음에 정하시면 됩니다.
+            {offer ?? "머릿속 구상만 들고 오세요. 자리·예산·컨셉부터 같이 잡고, 진행 여부는 그다음에 정하시면 됩니다."}
           </p>
+          {offer && (
+            <p className="mt-3 max-w-lg text-[0.9375rem] leading-[1.7] text-background/60">
+              비용은 없고, 진행 여부는 그다음에 정하시면 됩니다. 영업 전화는 하지 않습니다.
+            </p>
+          )}
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/#apply" className={buttonVariants({ size: "lg" })}>
               무료 상담 문의

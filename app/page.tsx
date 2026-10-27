@@ -171,7 +171,8 @@ export default function HomePage() {
             </p>
           </Reveal>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm md:p-8">
-            <LeadForm />
+            {/* 이름·연락처만 보이게(나머지는 접음). 칸 6개가 보이면 시작만 하고 나간다 — 진단 폼과 같은 이유(2026-10-22) */}
+            <LeadForm compact />
           </div>
         </div>
       </Section>
