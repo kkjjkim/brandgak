@@ -255,8 +255,19 @@
       **점수는 클라우드 컨테이너에서는 못 믿는다**: GPU 없는 소프트웨어 WebGL이라 three.js 청크가 메인 스레드 170초를 먹어 TBT 128초, 홈 40~58점(LCP 3.1~4.6s, 렌더 지연 81%).
       3D를 끈 조건(`--force-prefers-reduced-motion`)에선 홈 77~87점·LCP 2.8~2.9s·TBT 0.3~0.6s로 같은 조건의 /service(87점·LCP 3.0s)와 같음 → 홈이 다른 페이지보다 느리지 않음.
       LCP 요소는 h1이 아니라 히어로 소개 문단(`p.opacity-80`). 실제 휴대폰 점수는 대표님 컴퓨터에서 10/11 방식(`npx lighthouse@12 … --form-factor=mobile`)으로 2회 이상 재야 비교 가능.
-- [x] Aside 지시서 6 작성 `docs/aside-2026-10-27.md`(서치콘솔 색인 요청 4개·보강 전 기준 숫자·네이버 수집·빙 확인·휴대폰 속도 실측).
-- [ ] **데스크톱 세션(대표님 Chrome)에서 바로 할 것**(Aside 가 먼저 하면 생략) — 클라우드 세션엔 Chrome 도구가 없어(10/27 확인) 여기까지만 됨:
+- [x] Aside 지시서 6 작성 `docs/aside-2026-10-27.md` + 구글 문서 사본 → **Aside 당일 보고(10/27 오후, 5개 중 4개 완료)**:
+      ① 서치콘솔: 4편 모두 이미 색인돼 있었고 4개 다 "색인 생성 요청됨"(한도 안 걸림).
+      ② **보강 전 기준(28일, 10/24까지)**: 사이트 전체 클릭 5·노출 148·18.3위, 잡힌 검색어 14개뿐. 지시서의 검색어 8개는 **전부 없음**(가장 가까운 "무인매장 창업" 노출 1·48위, "무인매장" 노출 2·97.5위).
+         "무인 창업 7.0위"(10/21 기록)는 28일 표에 없음 — 10/21 수치는 3개월 창 기준이었던 듯, 앞으로 기간을 같이 적을 것.
+         글별: unmanned-store 노출 5·75.0위 / small-space-interior 노출 4·6.5위 / commercial-lease-checklist·startup-government-funding 없음.
+         10/23 보강 4개: 가게 인테리어 노출 4·16.0위(10/21 18.8) / "인테리어 업체 고르는법" 노출 1·21위(12.5) / 가게브랜딩 없음(10.1) / "배달전문점창업" 노출 46·18.7위(16.2, "배달 창업"은 없음).
+         11~20위 검색어는 배달전문점창업(46)·가게 인테리어(4) 둘뿐. **노출 자체가 너무 적어 순위 변동은 2주 뒤에도 잡음일 수 있다** — 판단은 노출 수로.
+      ③ 네이버(seri414): 수집 요청 4개 16:11 접수. IndexNow 접수 내역 화면은 없음(수집 현황 갱신일 10/27). 주의: Aside 가 네이버 limitwarm1 계정을 실수로 한 번 로그아웃함.
+      ④ 빙: IndexNow 10/27 14:46 제출분 6개 확인. **`site:brandgak.com` 30건**(10/22 0건 → 빙 색인 시작). 단 store-naming·brand-concept-first·franchise-vs-brand 등이 옛 제목 "PAUL & MARIE"로 표시 —
+         운영 title 은 전부 "| 브랜드각"으로 정상·옛 vercel.app 주소는 308 확인 → 10/9 개명 전 캐시. **사이트맵 전체 URL을 빙·indexnow.org 에 다시 제출**(46개 URL, 빙·indexnow.org 둘 다 200)해 재수집을 당김.
+      ⑤ 휴대폰 속도 실측은 Aside 환경에서 Chrome 을 못 띄워 실패 → 10/28 16:20 PageSpeed 자동 재측정으로 대신(대표님께 시키지 않음).
+      보고서 원본: Aside `artifacts/브랜드각_Aside_작업결과_지시서6.md`.
+- [ ] **데스크톱 세션(대표님 Chrome)에서 할 것**: 색인 요청은 Aside 가 끝냈으므로 **휴대폰 속도 실측만**(10/28 PageSpeed 결과가 또 429면) — 클라우드 세션엔 Chrome 도구가 없어(10/27 확인) 여기까지만 됨:
       서치콘솔 URL 속성 `https://www.brandgak.com/` > URL 검사 > "색인 생성 요청" 4개:
       /insights/unmanned-store · /insights/commercial-lease-checklist · /insights/startup-government-funding · /insights/small-space-interior
       같은 김에 실적 > 검색어 28일에서 "무인 창업"·"상가 계약"·"정책자금"·"작은 카페 인테리어" 노출·순위를 적어 두면 보강 전 기준이 된다.
