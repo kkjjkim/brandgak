@@ -54,7 +54,7 @@ function emailHtml(): string {
 }
 
 // 배포 확인용. 코드를 바꾼 뒤 운영에 새 판이 떴는지 이 값으로 본다(Vercel 배포 완료 신호가 따로 없다).
-const VERSION = "2026-10-27.2";
+const VERSION = "2026-10-27.3";
 export async function GET() {
   return NextResponse.json({ ok: true, version: VERSION }, { headers: { "Cache-Control": "no-store" } });
 }
@@ -112,6 +112,22 @@ export async function POST(req: NextRequest) {
       if (!r.ok) console.warn("체크리스트 명단 추가 실패:", r.status, (await r.text()).slice(0, 200));
     } catch (err) {
       console.warn("체크리스트 명단 추가 오류:", err);
+    }
+  }
+
+  // 1-b) 운영자 메일함에도 한 줄 남긴다(제목만 보면 됨). Vercel 의 Resend 키가 발송 전용이라 위 /contacts 가 401 로 막힌 상태(10/27 확인)에서도
+  // 명단이 유실되지 않게 — Claude 가 이 메일들을 읽어 Resend 명단에 넣는다. 키를 전체 권한으로 바꾸면 위 등록이 바로 되고 이 메일은 기록용으로 남는다.
+  const notifyTo = process.env.LEAD_NOTIFY_TO;
+  if (notifyTo) {
+    try {
+      await resend.emails.send({
+        from: process.env.LEAD_NOTIFY_FROM || "브랜드각 <onboarding@resend.dev>",
+        to: notifyTo.split(",").map((s) => s.trim()),
+        subject: `[${site.mailTag} · 체크리스트 신청] ${email}`,
+        html: `<p>체크리스트 받기: <b>${escapeHtml(email)}</b></p><p>유입: ${escapeHtml(source || "")}</p>`,
+      });
+    } catch (err) {
+      console.warn("체크리스트 신청 알림 실패:", err);
     }
   }
 
