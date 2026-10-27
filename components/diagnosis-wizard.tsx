@@ -162,7 +162,7 @@ export function DiagnosisWizard({
         <p className="mt-4 leading-relaxed text-muted-foreground">
           위 내용은 일반적인 원칙입니다. 실제로는 자리·예산·업종에 따라 답이
           달라집니다. 답해주신 내용은 아래에 이미 담겨 있으니 연락처만
-          남겨주시면 됩니다.
+          남겨주시면 됩니다. 영업일 하루 안에 경영지도사가 직접 전화드립니다.
         </p>
 
         <div className="mt-8">

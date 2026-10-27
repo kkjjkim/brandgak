@@ -31,7 +31,7 @@ export function CtaSection({ offer }: { offer?: string } = {}) {
           </p>
           {offer && (
             <p className="mt-3 max-w-lg text-[0.9375rem] leading-[1.7] text-background/60">
-              비용은 없고, 진행 여부는 그다음에 정하시면 됩니다. 영업 전화는 하지 않습니다.
+              비용은 없고, 영업일 하루 안에 경영지도사가 직접 전화드립니다. 진행 여부는 그다음에 정하시면 됩니다.
             </p>
           )}
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">

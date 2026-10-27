@@ -21,7 +21,7 @@ export default function CompletePage() {
           신청 완료됐습니다.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-foreground/70">
-          1~2일 안에 연락드릴게요. 그동안 머릿속 구상을 편하게 정리해 두세요.
+          영업일 하루 안에 경영지도사가 직접 전화드릴게요. 그동안 머릿속 구상을 편하게 정리해 두세요.
         </p>
         <Link
           href="/"
