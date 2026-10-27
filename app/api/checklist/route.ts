@@ -54,7 +54,7 @@ function emailHtml(): string {
 }
 
 // 배포 확인용. 코드를 바꾼 뒤 운영에 새 판이 떴는지 이 값으로 본다(Vercel 배포 완료 신호가 따로 없다).
-const VERSION = "2026-10-27.3";
+const VERSION = "2026-10-27.4";
 export async function GET() {
   return NextResponse.json({ ok: true, version: VERSION }, { headers: { "Cache-Control": "no-store" } });
 }
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
           email,
           unsubscribed: false,
           segments: [{ id: segmentId }],
-          properties: { source: source || "" },
+          // 사용자 속성(properties)은 Resend 에 미리 정의된 키만 받는다(없으면 422) — 유입은 운영자 메일에만 남긴다.
         }),
       });
       if (!r.ok) console.warn("체크리스트 명단 추가 실패:", r.status, (await r.text()).slice(0, 200));
