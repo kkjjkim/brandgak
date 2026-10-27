@@ -53,6 +53,12 @@ function emailHtml(): string {
   );
 }
 
+// 배포 확인용. 코드를 바꾼 뒤 운영에 새 판이 떴는지 이 값으로 본다(Vercel 배포 완료 신호가 따로 없다).
+const VERSION = "2026-10-27.2";
+export async function GET() {
+  return NextResponse.json({ ok: true, version: VERSION }, { headers: { "Cache-Control": "no-store" } });
+}
+
 export async function POST(req: NextRequest) {
   let body: unknown;
   try {
