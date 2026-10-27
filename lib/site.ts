@@ -73,6 +73,9 @@ export const site = {
     // 비밀 키(TURNSTILE_SECRET_KEY)는 절대 코드에 두지 말고 Vercel 환경변수로만.
     turnstileSiteKey: "0x4AAAAAAD5YbmWz8SD3yjtc",
   },
+  // 글 끝 "체크리스트 받기"로 모은 이메일이 들어가는 Resend 명단(세그먼트) ID. 공개돼도 안전한 식별자(비밀키 아님).
+  // 새 글 안내는 이 명단에 Resend 브로드캐스트로 보낸다. 환경변수 RESEND_AUDIENCE_ID 가 있으면 그쪽이 우선.
+  resendAudienceId: "3b72b5d9-eac9-4abc-bf08-7bfcdb7936a3",
   // 상담 알림 메일 제목 앞에 붙는 프로젝트 식별 태그.
   // 여러 프로젝트를 운영할 때 메일함에서 어느 사이트에서 온 신청인지 구분하기 위함.
   mailTag: "브랜드각",

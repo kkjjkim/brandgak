@@ -12,6 +12,7 @@ import { articleLd, breadcrumbLd, faqLd } from "@/lib/seo";
 import { InsightKeyPoints } from "@/components/insight-key-points";
 import { InsightFaq } from "@/components/insight-faq";
 import { RelatedInsights } from "@/components/related-insights";
+import { ChecklistSignup } from "@/components/checklist-signup";
 import { getAllInsights, getInsight, getRelatedInsights } from "@/lib/insights";
 
 // 예약 글이 날짜가 되면 나타나도록 6시간마다 다시 만든다.
@@ -82,6 +83,9 @@ export default function InsightPage({ params }: { params: { slug: string } }) {
         )}
         <InsightFaq items={post.faq} />
         <ReadTracker slug={post.slug} />
+
+        {/* 자료 받기는 글 끝에만 (대표 결정 2026-10-11). 전화번호 대신 이메일로 명단을 만든다(2026-10-27). */}
+        <ChecklistSignup slug={post.slug} />
 
         <RelatedInsights posts={getRelatedInsights(post.slug)} />
 
