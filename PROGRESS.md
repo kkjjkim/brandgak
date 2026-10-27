@@ -255,7 +255,8 @@
       **점수는 클라우드 컨테이너에서는 못 믿는다**: GPU 없는 소프트웨어 WebGL이라 three.js 청크가 메인 스레드 170초를 먹어 TBT 128초, 홈 40~58점(LCP 3.1~4.6s, 렌더 지연 81%).
       3D를 끈 조건(`--force-prefers-reduced-motion`)에선 홈 77~87점·LCP 2.8~2.9s·TBT 0.3~0.6s로 같은 조건의 /service(87점·LCP 3.0s)와 같음 → 홈이 다른 페이지보다 느리지 않음.
       LCP 요소는 h1이 아니라 히어로 소개 문단(`p.opacity-80`). 실제 휴대폰 점수는 대표님 컴퓨터에서 10/11 방식(`npx lighthouse@12 … --form-factor=mobile`)으로 2회 이상 재야 비교 가능.
-- [ ] **데스크톱 세션(대표님 Chrome)에서 바로 할 것** — 클라우드 세션엔 Chrome 도구가 없어(10/27 확인) 여기까지만 됨:
+- [x] Aside 지시서 6 작성 `docs/aside-2026-10-27.md`(서치콘솔 색인 요청 4개·보강 전 기준 숫자·네이버 수집·빙 확인·휴대폰 속도 실측).
+- [ ] **데스크톱 세션(대표님 Chrome)에서 바로 할 것**(Aside 가 먼저 하면 생략) — 클라우드 세션엔 Chrome 도구가 없어(10/27 확인) 여기까지만 됨:
       서치콘솔 URL 속성 `https://www.brandgak.com/` > URL 검사 > "색인 생성 요청" 4개:
       /insights/unmanned-store · /insights/commercial-lease-checklist · /insights/startup-government-funding · /insights/small-space-interior
       같은 김에 실적 > 검색어 28일에서 "무인 창업"·"상가 계약"·"정책자금"·"작은 카페 인테리어" 노출·순위를 적어 두면 보강 전 기준이 된다.
