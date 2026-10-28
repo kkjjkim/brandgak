@@ -249,7 +249,7 @@
       타입체크·린트·빌드 통과, 390px 가로 넘침 없음(표 5개), Article dateModified 10/27·FAQPage 개수 확인(Playwright).
 - [x] 배포 확인(운영 4편 dateModified 10/27, 사이트맵 lastmod 10/27) → **IndexNow 제출**: 4편 + /insights + 사이트맵을 api.indexnow.org·네이버·빙에 보냄, 셋 다 200(키 파일 200).
       구글은 IndexNow를 안 받고 서치콘솔 색인 요청은 구글 로그인이 필요해 클라우드에서 못 함 — 다음 데스크톱 세션(대표 Chrome)에서 URL 검사 4개. 빙·네이버는 IndexNow로 끝.
-      Ahrefs MCP는 순위·구독 조회 전부 "Insufficient plan"(플랜 부족) → 순위는 서치콘솔로만. PageSpeed API 무키는 오늘도 429(공용 프로젝트 일일 한도) → 10/28 16:20 KST 에 자동 재측정 예약(세션 예약 작업).
+      Ahrefs MCP는 순위·구독 조회 전부 "Insufficient plan"(플랜 부족) → 순위는 서치콘솔로만. PageSpeed API 무키는 오늘도 429(공용 프로젝트 일일 한도) → 10/28 16:20 KST 자동 재측정도 **한도 초기화 직후인데 429** — 무키 공용 프로젝트는 항상 소진돼 있어 쓸 수 없다. 재시도 안 함. 실측은 데스크톱 세션(Chrome Lighthouse)으로만.
 - [x] **홈 첫 화면 속도(10/23 수정 확인, 운영 www.brandgak.com)**: 서버 HTML 첫 img 가 `/hero/stage-sketch-1280.webp`(srcSet 1280/1920/2560)로 바로 나가고
       Lighthouse 네트워크에서 0.6~0.77s에 High 우선순위로 받음, 셰이더의 두 번째 요청은 0KB(캐시 재사용) — 10/23 설계대로 동작.
       **점수는 클라우드 컨테이너에서는 못 믿는다**: GPU 없는 소프트웨어 WebGL이라 three.js 청크가 메인 스레드 170초를 먹어 TBT 128초, 홈 40~58점(LCP 3.1~4.6s, 렌더 지연 81%).
