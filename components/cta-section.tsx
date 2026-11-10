@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // 서브 페이지 끝마다 두는 신청 진입점 (모든 페이지에 "무료 상담" 진입점).
 // 전환 핵심이라 모션으로 숨기지 않고 항상 노출한다. 홈 첫 화면의 저녁 장면으로 이야기를 닫는다.
@@ -35,12 +36,13 @@ export function CtaSection({ offer }: { offer?: string } = {}) {
             </p>
           )}
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link href="/#apply" className={buttonVariants({ size: "lg" })}>
+            <Link href="/#apply" // 어두운 사진 위라 B안 검정 버튼 대신 흰 버튼
+              className={cn(buttonVariants({ size: "lg" }), "bg-background text-foreground hover:bg-background/85")}>
               무료 상담 문의
             </Link>
             <Link
               href="/diagnosis"
-              className="group inline-flex items-center gap-2 text-[0.9375rem] font-medium text-background/90 hover:text-primary"
+              className="group inline-flex items-center gap-2 text-[0.9375rem] font-medium text-background/90 underline-offset-4 hover:text-background hover:underline"
             >
               1분 컨셉 진단
               <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>

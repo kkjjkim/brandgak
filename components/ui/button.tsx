@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// shadcn/ui 버튼 (new-york). AvroKO 톤에 맞춰 둥글기·그림자 절제.
+// shadcn/ui 버튼 (new-york). 모서리·그림자는 토큰(--radius 0)과 B안 규칙대로 없음.
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
@@ -10,8 +10,8 @@ const buttonVariants = cva(
       variant: {
         // 채워진 골드/차콜 CTA — 눈에 띄게 (AGENTS.md 9번)
         default:
-          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90",
-        ink: "bg-foreground text-background shadow-sm hover:bg-foreground/90",
+          "bg-primary text-primary-foreground hover:bg-primary/90",
+        ink: "bg-foreground text-background hover:bg-foreground/90",
         outline:
           "border border-foreground/25 bg-transparent text-foreground hover:bg-foreground/5",
         ghost: "hover:bg-foreground/5",

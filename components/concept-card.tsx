@@ -35,7 +35,7 @@ export function ConceptCard({ concept }: { concept: Concept }) {
       />
 
       <div className="p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-background/70">
           {concept.type}
         </p>
         <h3 className="mt-2 text-2xl font-extrabold uppercase tracking-wide">

@@ -60,7 +60,7 @@ export function ConceptCarousel() {
           key={c.slug}
           className="absolute inset-x-0 bottom-0 p-7 md:p-12 motion-safe:animate-fade-in-up"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-background/70">
             {c.type}
           </p>
           <h3 className="mt-2 text-3xl font-extrabold uppercase tracking-wide md:text-5xl">
@@ -71,7 +71,7 @@ export function ConceptCarousel() {
           </p>
           <Link
             href={`/concepts#${c.slug}`}
-            className="mt-5 inline-flex items-center gap-1 border-b border-background/50 pb-1 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+            className="mt-5 inline-flex items-center gap-1 border-b border-background/50 pb-1 text-sm font-medium transition-colors hover:border-background"
           >
             자세히 보기
             <ArrowUpRight className="h-4 w-4" />
@@ -83,7 +83,7 @@ export function ConceptCarousel() {
           type="button"
           aria-label="이전"
           onClick={() => go(-1)}
-          className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/20 text-background backdrop-blur transition-colors hover:border-primary hover:text-primary"
+          className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/20 text-background backdrop-blur transition-colors hover:border-background"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
@@ -91,7 +91,7 @@ export function ConceptCarousel() {
           type="button"
           aria-label="다음"
           onClick={() => go(1)}
-          className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/20 text-background backdrop-blur transition-colors hover:border-primary hover:text-primary"
+          className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/20 text-background backdrop-blur transition-colors hover:border-background"
         >
           <ArrowRight className="h-5 w-5" />
         </button>

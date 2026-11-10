@@ -80,7 +80,7 @@ export function CinematicBand({
           className={cn("max-w-xl", align === "right" && "ml-auto md:text-right")}
         >
           {eyebrow && (
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-background/70">
               {eyebrow}
             </p>
           )}

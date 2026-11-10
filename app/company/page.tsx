@@ -92,7 +92,7 @@ export default function CompanyPage() {
                 className="absolute inset-0 -z-20 h-full w-full object-cover"
               />
               <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-[#120e0b] via-[#120e0b]/75 to-[#120e0b]/10" />
-              <span className="text-[0.8125rem] font-medium tracking-[0.04em] text-primary">{t.role}</span>
+              <span className="text-[0.8125rem] font-medium tracking-[0.04em] text-background/70">{t.role}</span>
               <h3 className="mt-5 font-display text-2xl font-semibold">{t.who}</h3>
               <p className="mt-4 leading-relaxed text-background/75">{t.d}</p>
               {t.who === BUILDER && (
