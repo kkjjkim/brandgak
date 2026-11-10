@@ -34,7 +34,7 @@ export default function PortfolioPage() {
             href="/#apply"
             className="mt-5 block bg-primary py-[15px] text-center text-[15px] font-semibold text-primary-foreground hover:bg-primary/85"
           >
-            내 가게 컨셉 한 장 받기
+            무료 상담 신청
           </Link>
         </div>
       </section>

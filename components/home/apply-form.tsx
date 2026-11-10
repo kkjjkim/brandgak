@@ -229,7 +229,7 @@ export function ApplyForm() {
 
       <div className="mt-1">
         <Button type="submit" className="h-auto w-full py-[15px] text-[15px] font-semibold hover:bg-primary/85" disabled={loading}>
-          {loading ? "보내는 중…" : "내 가게 컨셉 한 장 받기"}
+          {loading ? "보내는 중…" : "무료 상담 신청"}
         </Button>
         <p className="mt-2 text-center text-[13px] text-muted-foreground">영업일 하루 안에 경영지도사가 직접 전화드립니다.</p>
       </div>
