@@ -1,26 +1,24 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Section, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
-import { Promises } from "@/components/home/promises";
 import { JsonLd } from "@/components/json-ld";
 import { breadcrumbLd } from "@/lib/seo";
-import { getAllInsights } from "@/lib/insights";
 import { site } from "@/lib/site";
-
-// 인사이트 글 수가 예약 발행으로 늘어나므로 주기적으로 다시 만든다.
-export const revalidate = 21600;
+import { BUILDER } from "@/lib/portfolio";
 
 export const metadata: Metadata = {
   title: "회사 소개 — 가게의 각을 잡는 사람들",
   description:
-    "브랜드각은 국가공인 경영지도사와 백화점·대형 쇼핑몰 브랜드 매장을 시공해 온 팀이 함께 일하는 창업·브랜드·공간 컨설팅입니다.",
+    `브랜드각은 국가공인 경영지도사와 백화점·쇼핑몰 브랜드 매장을 직접 시공해 온 ${BUILDER}가 함께 일하는 창업·브랜드·공간 컨설팅입니다.`,
   alternates: { canonical: "/company" },
 };
 
-// 회사 소개 — 실적·발주처 이름은 쓰지 않는다(대표 결정: 클라이언트가 알아보는 실적은 노출하지 않음).
-// 신뢰는 이름의 뜻, 팀 구조, 일하는 원칙, 확인 가능한 사실로만 만든다.
+// 회사 소개 — 신뢰는 이름의 뜻, 팀 구조, 일하는 원칙, 확인 가능한 사실로만 만든다.
+// 2026-11-10 대표 결정: 공간·시공은 (주)디자인드비 실명으로, 실적은 직접 시공한 8곳만(lib/portfolio.ts).
+// 스스로 발목 잡는 약속(공사를 권하지 않음·대금 분할 등)과 낡은 숫자는 쓰지 않는다.
 const TEAM = [
   {
     role: "사업 · 브랜드",
@@ -30,8 +28,8 @@ const TEAM = [
   },
   {
     role: "공간 · 시공",
-    who: "백화점·대형 쇼핑몰 브랜드 매장 시공팀",
-    d: "까다로운 기준의 브랜드 매장을 지어 온 팀이 설계와 시공을 맡습니다. 공정·마감·일정을 브랜드 매장의 기준으로 관리합니다.",
+    who: BUILDER,
+    d: "Bath & Body Works, THE SIENA, Yellow Basket, Mofun 등 백화점·쇼핑몰 매장 8곳을 직접 시공한 회사가 설계와 시공, 가구 제작을 맡습니다.",
     img: "team-site",
   },
 ];
@@ -39,7 +37,7 @@ const TEAM = [
 const PRINCIPLES = [
   {
     t: "공사 전에 숫자부터",
-    d: "자리·예산·객단가가 맞는지 먼저 봅니다. 숫자가 맞지 않으면 공사를 권하지 않습니다.",
+    d: "자리·예산·객단가가 맞는지 먼저 봅니다.",
   },
   {
     t: "컨셉은 한 문장으로",
@@ -51,12 +49,11 @@ const PRINCIPLES = [
   },
   {
     t: "생각을 먼저 공개합니다",
-    d: "", // 글 수는 빌드 시점에 센다
+    d: "창업·인테리어 인사이트를 무료로 열어 두었습니다. 읽어 보고 맞다 싶을 때 연락 주세요.",
   },
 ];
 
 export default function CompanyPage() {
-  const insightCount = getAllInsights().length;
   return (
     <>
       <JsonLd data={breadcrumbLd([{ name: "회사 소개", path: "/company" }])} />
@@ -98,6 +95,11 @@ export default function CompanyPage() {
               <span className="text-[0.8125rem] font-medium tracking-[0.04em] text-primary">{t.role}</span>
               <h3 className="mt-5 font-display text-2xl font-semibold">{t.who}</h3>
               <p className="mt-4 leading-relaxed text-background/75">{t.d}</p>
+              {t.who === BUILDER && (
+                <Link href="/portfolio" className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-background underline-offset-4 hover:underline">
+                  시공 사례 보기 <span aria-hidden>→</span>
+                </Link>
+              )}
             </Reveal>
           ))}
         </div>
@@ -112,15 +114,12 @@ export default function CompanyPage() {
               <span className="text-xs tabular-nums text-primary">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="mt-4 font-display text-xl font-semibold sm:text-[1.4rem]">{p.t}</h3>
               <p className="mt-3 text-[0.975rem] leading-relaxed text-foreground/70">
-                {p.d ||
-                  `창업·인테리어 인사이트 ${insightCount}편과 1분 컨셉 진단을 무료로 열어 두었습니다. 읽어 보고 맞다 싶을 때 연락 주세요.`}
+                {p.d}
               </p>
             </Reveal>
           ))}
         </div>
       </Section>
-
-      <Promises />
 
       {/* 사업자 정보 — 누가 하는지 알고 맡기실 수 있게 */}
       <Section>
