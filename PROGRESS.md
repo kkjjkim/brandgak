@@ -365,6 +365,12 @@
   **11월 말(11/24 전후) 다음 글 묶음(11/27 이후, 화·금) 작성 — 타깃은 고급 매장·레스토랑·대형카페 준비자(10/27 결정).**
   **대표님께**: Chrome의 Claude 확장에서 search.google.com·analytics.google.com 을 '항상 허용'으로 해 주셔야 무인 점검이 데이터를 읽습니다(4주 연속 막힘).
 
+### 2026-11-10 (화, Aside) — 신청 유실 사고와 임시 복구
+- **원인**: 11/4 소원(sowonlake) 무료 슬롯 확보를 위해 Supabase `브랜드공간디자인`(nlmrgbhholdamjbamail)을 일시정지 → DB 주소 NXDOMAIN → 11/4~11/10 `/api/leads` 전부 500, 알림 메일도 저장 뒤에만 나가 같이 막힘.
+  `/api/recent-leads`는 오류를 `[]`로 삼켜서 주간 점검의 "신청 0건"이 이 고장을 가렸다. 무료 한도(계정당 2개: 가치잇다·sowonlake) 때문에 재개 불가.
+- **조치(7aba896, main 배포)**: insert 실패·연결 실패 시 운영자 메일로 대체 접수(제목 `[DB 미저장·메일만]`) 후 200. 운영 시험 1건 kkjjkim 메일 수신 확인(10:18).
+- **다음**: 접수처를 Supabase 대신 구글시트(Apps Script, 원탑 홈페이지 방식)로 옮기는 안을 대표 결정 대기. 주간 점검은 recent-leads 0건만 보지 말고 /api/health 결과도 볼 것.
+
 ## 다음 할 것 (운영자/대표님)
 - [ ] Supabase 프로젝트 생성 → `supabase/schema.sql` 실행 → `.env.local` 에 URL/anon 키 입력
 - [ ] Resend 가입 → 도메인 인증 → `RESEND_API_KEY`, `LEAD_NOTIFY_TO`, `LEAD_NOTIFY_FROM` 입력
