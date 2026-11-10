@@ -18,19 +18,19 @@ export function ChoiceChips({
   onChange: (v: string) => void;
 }) {
   return (
-    <fieldset className="grid gap-2.5">
-      <legend className="mb-2.5 text-sm font-medium leading-none">{legend}</legend>
-      <div className="flex flex-wrap gap-2">
+    <fieldset className="grid">
+      <legend className="mb-2 text-[13px] leading-none text-[#555]">{legend}</legend>
+      <div className="flex flex-wrap gap-1.5">
         {options.map((o) => {
           const checked = value === o;
           return (
             <label
               key={o}
               className={cn(
-                "inline-flex h-11 cursor-pointer select-none items-center rounded-full border px-4 text-[0.9375rem] transition-colors duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
+                "inline-flex h-11 cursor-pointer select-none items-center border px-3.5 text-[14px] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
                 checked
                   ? "border-foreground bg-foreground text-background"
-                  : "border-foreground/20 bg-background text-foreground/80 hover:border-foreground/50"
+                  : "border-[#ccc] bg-background text-foreground hover:border-foreground"
               )}
             >
               <input

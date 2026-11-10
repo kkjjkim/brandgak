@@ -1,32 +1,25 @@
 import Link from "next/link";
 import { PortfolioCard } from "@/components/portfolio-card";
-import { PORTFOLIO } from "@/lib/portfolio";
+import { BUILDER, PORTFOLIO } from "@/lib/portfolio";
 
-// 홈 시공 사례 — 직접 시공한 8곳. 휴대폰에서는 옆으로 넘겨 보고, PC에서는 4열로 한 번에 본다.
+// 홈 시공 사례 — 앞 6곳을 사진 크게. 휴대폰 1열, PC 2열 (2026-11-10 B안).
 export function PortfolioList() {
   return (
-    <section id="portfolio" className="scroll-mt-20 bg-secondary/40 py-20 md:py-28">
-      <div className="container">
-        <h2 className="font-display text-[1.75rem] font-semibold leading-[1.35] tracking-[-0.02em] sm:text-4xl">
-          사장님 가게 크기의 매장을, 백화점 기준으로.
-        </h2>
-      </div>
-      {/* 휴대폰: 가로 스크롤(이 줄 안에서만 넘친다). 다음 카드가 살짝 보여 넘길 수 있다는 걸 알린다. */}
-      <ul className="container mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible lg:grid-cols-4">
-        {PORTFOLIO.map((p) => (
-          <li key={p.slug} className="w-[78%] shrink-0 snap-start md:w-auto">
-            <PortfolioCard item={p} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 78vw" />
+    <section id="portfolio" className="container scroll-mt-20 pt-11 md:pt-24">
+      <p className="mb-3.5 text-[12px] tracking-[0.02em] text-[#888]">{BUILDER}가 직접 시공한 매장</p>
+      <ul className="grid gap-y-[34px] md:grid-cols-2 md:gap-x-8 md:gap-y-14">
+        {PORTFOLIO.slice(0, 6).map((p) => (
+          <li key={p.slug}>
+            <PortfolioCard item={p} sizes="(min-width: 768px) 50vw, 100vw" />
           </li>
         ))}
       </ul>
-      <div className="container mt-8">
-        <Link
-          href="/portfolio"
-          className="inline-flex h-12 items-center gap-2 rounded-md border border-foreground/20 px-5 font-medium transition-colors hover:bg-foreground/5"
-        >
-          시공 사례 전체 보기 <span aria-hidden>→</span>
-        </Link>
-      </div>
+      <Link
+        href="/portfolio"
+        className="mt-8 inline-block py-2 text-[14px] underline underline-offset-4 hover:text-muted-foreground md:mt-12"
+      >
+        시공 사례 전체 보기
+      </Link>
     </section>
   );
 }

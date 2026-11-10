@@ -13,12 +13,17 @@ import { readSource } from "@/lib/attribution";
 import { site } from "@/lib/site";
 import { track } from "@/lib/track";
 import { useTurnstile } from "@/lib/use-turnstile";
+import { cn } from "@/lib/utils";
 
-// 홈 신청 폼 (2026-11-10 지시서 9번). 서버는 기존 /api/leads 그대로 쓴다.
+// B안 입력칸 — 상자 없이 아래 선만(시안 mockB). 라벨은 작은 회색 글씨.
+const LABEL = "text-[13px] font-normal text-[#555]";
+const LINE =
+  "h-auto border-0 border-b border-input bg-transparent px-0 py-2.5 text-[15px] placeholder:text-[#999] focus-visible:border-foreground focus-visible:shadow-[0_1px_0_0_hsl(var(--foreground))] focus-visible:ring-0";
+
+// 홈 신청 폼 (2026-11-10 지시서 9번, B안에서 평수·예산 칸을 뺐다). 서버는 기존 /api/leads 그대로 쓴다.
 // 새 칸(오픈 예정·하고 싶은 가게·동의 기록)은 message 에 합쳐 보내 DB 스키마를 바꾸지 않는다.
 const INDUSTRIES = ["카페", "식당", "뷰티", "리테일", "기타"] as const;
 const OPEN_TIMING = ["3개월 안", "6개월 안", "미정"] as const;
-const BUDGETS = ["3억 이상", "1~3억", "5천~1억", "5천 이하", "아직 모름"] as const;
 
 type Form = {
   name: string;
@@ -26,12 +31,10 @@ type Form = {
   industry: string;
   region: string;
   openTiming: string;
-  size: string;
-  budget: string;
   dream: string;
 };
 
-const initial: Form = { name: "", phone: "", industry: "", region: "", openTiming: "", size: "", budget: "", dream: "" };
+const initial: Form = { name: "", phone: "", industry: "", region: "", openTiming: "", dream: "" };
 
 // 같은 분석 흐름을 이어 보려고 예전 홈 폼과 같은 form_type 을 쓴다.
 const FORM_TYPE = "direct";
@@ -114,8 +117,7 @@ export function ApplyForm() {
           name: form.name,
           phone: form.phone,
           industry: form.industry,
-          location: [form.region.trim(), form.size.trim()].filter(Boolean).join(" / "),
-          budget: form.budget,
+          location: form.region.trim(),
           message: buildMessage(form),
           source: readSource(),
           company_website: honeypotRef.current?.value || "", // 허니팟
@@ -137,23 +139,23 @@ export function ApplyForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} onInput={onFirstInput} className="grid gap-7">
+    <form ref={formRef} onSubmit={onSubmit} onInput={onFirstInput} className="grid gap-5">
       {/* 허니팟 — 사람 눈에 안 보이는 칸. 봇이 채우면 서버가 폐기한다. */}
       <div aria-hidden className="pointer-events-none absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="company_website">회사명 (입력하지 마세요)</label>
         <input ref={honeypotRef} id="company_website" name="company_website" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div className="grid gap-2">
-          <Label htmlFor="apply-name">
-            이름 <span className="text-primary">*</span>
+      <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+        <div className="grid gap-1.5">
+          <Label htmlFor="apply-name" className={LABEL}>
+            이름<span aria-hidden>*</span>
           </Label>
-          <Input id="apply-name" name="name" autoComplete="name" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="홍길동…" required />
+          <Input id="apply-name" name="name" autoComplete="name" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="홍길동" required className={LINE} />
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="apply-phone">
-            연락처 <span className="text-primary">*</span>
+        <div className="grid gap-1.5">
+          <Label htmlFor="apply-phone" className={LABEL}>
+            연락처<span aria-hidden>*</span>
           </Label>
           <Input
             id="apply-phone"
@@ -165,30 +167,32 @@ export function ApplyForm() {
             onChange={(e) => set("phone", e.target.value)}
             placeholder="010-1234-5678"
             required
+            className={LINE}
           />
         </div>
       </div>
 
       <ChoiceChips name="industry" legend="업종" options={INDUSTRIES} value={form.industry} onChange={(v) => set("industry", v)} />
 
-      <div className="grid gap-2">
-        <Label htmlFor="apply-region">지역</Label>
-        <Input id="apply-region" name="region" value={form.region} onChange={(e) => set("region", e.target.value)} placeholder="예: 서울 성수동…" />
+      <div className="grid gap-1.5">
+        <Label htmlFor="apply-region" className={LABEL}>지역</Label>
+        <Input id="apply-region" name="region" autoComplete="address-level2" value={form.region} onChange={(e) => set("region", e.target.value)} placeholder="예: 서울 성수동" className={LINE} />
       </div>
 
       <ChoiceChips name="open_timing" legend="오픈 예정" options={OPEN_TIMING} value={form.openTiming} onChange={(v) => set("openTiming", v)} />
 
-      <div className="grid gap-7 border-t border-border pt-7">
-        <p className="-mb-2 text-sm text-muted-foreground">아래는 적지 않으셔도 됩니다.</p>
-        <div className="grid gap-2">
-          <Label htmlFor="apply-size">평수</Label>
-          <Input id="apply-size" name="size" value={form.size} onChange={(e) => set("size", e.target.value)} placeholder="예: 20평…" />
-        </div>
-        <ChoiceChips name="budget" legend="예산" options={BUDGETS} value={form.budget} onChange={(v) => set("budget", v)} />
-        <div className="grid gap-2">
-          <Label htmlFor="apply-dream">어떤 가게를 열고 싶으세요?</Label>
-          <Textarea id="apply-dream" name="dream" maxLength={700} value={form.dream} onChange={(e) => set("dream", e.target.value)} placeholder="한 줄이면 충분해요…" />
-        </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="apply-dream" className={LABEL}>어떤 가게를 열고 싶으세요? (선택)</Label>
+        <Textarea
+          id="apply-dream"
+          name="dream"
+          rows={1}
+          maxLength={700}
+          value={form.dream}
+          onChange={(e) => set("dream", e.target.value)}
+          placeholder="한 줄이면 충분합니다"
+          className={cn(LINE, "min-h-[46px] resize-y py-2.5")}
+        />
       </div>
 
       <ConsentNotice
@@ -206,7 +210,7 @@ export function ApplyForm() {
           )}
           <div ref={captcha.captchaRef} />
           {captcha.failed && (
-            <p className="rounded-md bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
+            <p className="border-l-2 border-foreground py-1 pl-4 text-sm leading-relaxed text-foreground/80">
               봇 방지 확인이 이 브라우저에서 연결되지 않고 있어요. 그대로 신청하셔도 접수됩니다. 불편하시면{" "}
               <a href={`tel:${site.business.phone}`} className="font-semibold text-foreground underline underline-offset-4">
                 {site.business.phone}
@@ -218,16 +222,16 @@ export function ApplyForm() {
       )}
 
       {error && (
-        <p role="alert" className="rounded-md bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <p role="alert" className="border-l-2 border-destructive py-1 pl-4 text-sm text-destructive">
           {error}
         </p>
       )}
 
-      <div>
-        <Button type="submit" size="lg" className="w-full active:scale-[0.99]" disabled={loading}>
+      <div className="mt-1">
+        <Button type="submit" className="h-auto w-full py-[15px] text-[15px] font-semibold hover:bg-primary/85" disabled={loading}>
           {loading ? "보내는 중…" : "내 가게 컨셉 한 장 받기"}
         </Button>
-        <p className="mt-3 text-center text-sm text-muted-foreground">영업일 하루 안에 경영지도사가 직접 전화드립니다.</p>
+        <p className="mt-2 text-center text-[13px] text-muted-foreground">영업일 하루 안에 경영지도사가 직접 전화드립니다.</p>
       </div>
     </form>
   );

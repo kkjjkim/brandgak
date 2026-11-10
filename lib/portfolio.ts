@@ -4,27 +4,35 @@
 export type PortfolioCase = {
   slug: string;
   brand: string;
+  kind: string; // 리빙 편집숍·팝업·매장·인숍
   place: string;
   year: number;
   pyeong: number;
-  role: string;
-  // public/portfolio/{image}-1600.webp · -960.webp. 첫 장이 대표 사진.
-  images: string[];
+  // 캡션 한 줄 — 그 매장에서 실제로 한 일을 구체적으로(2026-11-10 B안 지시서 문구 그대로)
+  line: string;
+  // public/portfolio/{photo}-1600.webp · -960.webp
+  photo: string;
 };
 
+// 순서는 B안 지시서 표 그대로. 홈은 앞 6개, /portfolio 는 8개 전부.
 export const PORTFOLIO: PortfolioCase[] = [
-  { slug: "mofun-ipark", brand: "Mofun", place: "용산 아이파크몰", year: 2025, pyeong: 32, role: "시공·가구 제작", images: ["mofun-ipark"] },
-  { slug: "bbw-centum", brand: "Bath & Body Works", place: "신세계 센텀시티", year: 2025, pyeong: 31, role: "시공·가구 제작", images: ["bbw-centum"] },
-  { slug: "bbw-parnas", brand: "Bath & Body Works", place: "파르나스몰", year: 2025, pyeong: 29, role: "시공·가구 제작", images: ["bbw-parnas"] },
-  { slug: "bbw-ak-hongdae", brand: "Bath & Body Works", place: "AK 홍대 (인숍)", year: 2024, pyeong: 8, role: "시공·가구 제작", images: ["bbw-ak-hongdae"] },
-  { slug: "siena-shinsegae-2024", brand: "THE SIENA", place: "신세계 강남 팝업", year: 2024, pyeong: 28, role: "디자인·시공·가구 제작", images: ["siena-shinsegae-2024"] },
-  { slug: "siena-lotte-jamsil", brand: "THE SIENA", place: "롯데 잠실", year: 2023, pyeong: 15, role: "디자인·시공·가구 제작", images: ["siena-lotte-jamsil"] },
-  { slug: "siena-shinsegae-2023", brand: "THE SIENA", place: "신세계 강남 팝업", year: 2023, pyeong: 28, role: "디자인·시공·가구 제작", images: ["siena-shinsegae-2023"] },
-  { slug: "yellowbasket-garosu", brand: "Yellow Basket", place: "가로수길", year: 2022, pyeong: 30, role: "디자인·시공·가구 제작", images: ["yellowbasket-garosu", "yellowbasket-garosu-2"] },
+  { slug: "yellowbasket-garosu", brand: "Yellow Basket", kind: "리빙 편집숍", place: "가로수길", pyeong: 30, year: 2022, photo: "yellowbasket-garosu-2", line: "곡선 원목 테이블이 매장 한가운데를 따라 흐르고, 아치 문 너머로 안쪽 공간이 이어집니다." },
+  { slug: "siena-shinsegae-2024", brand: "THE SIENA", kind: "팝업", place: "신세계 강남", pyeong: 28, year: 2024, photo: "siena-shinsegae-2024", line: "회색 체크 바닥 위에 오렌지 벽과 행거를 세워, 멀리서도 브랜드 색이 먼저 보이게 했습니다." },
+  { slug: "bbw-centum", brand: "Bath & Body Works", kind: "매장", place: "신세계 센텀시티", pyeong: 31, year: 2025, photo: "bbw-centum", line: "파란 체크 타일 벽과 원목 진열대로 브랜드 색을 그대로 옮겼습니다." },
+  { slug: "siena-lotte-jamsil", brand: "THE SIENA", kind: "매장", place: "롯데 잠실", pyeong: 15, year: 2023, photo: "siena-lotte-jamsil", line: "15평 안에 기둥을 감싼 디스플레이와 행거를 나눠 세웠습니다." },
+  { slug: "bbw-ak-hongdae", brand: "Bath & Body Works", kind: "인숍", place: "AK 홍대", pyeong: 8, year: 2024, photo: "bbw-ak-hongdae", line: "8평 인숍에 브랜드 벽과 진열대를 모두 담았습니다." },
+  { slug: "mofun-ipark", brand: "Mofun", kind: "매장", place: "용산 아이파크몰", pyeong: 32, year: 2025, photo: "mofun-ipark", line: "원형 무대와 색을 입힌 진열대로 통로의 시선을 모았습니다." },
+  { slug: "bbw-parnas", brand: "Bath & Body Works", kind: "매장", place: "파르나스몰", pyeong: 29, year: 2025, photo: "bbw-parnas", line: "입구 정면에서 매장 안쪽 진열까지 한눈에 들어오게 열었습니다." },
+  { slug: "siena-shinsegae-2023", brand: "THE SIENA", kind: "팝업", place: "신세계 강남", pyeong: 28, year: 2023, photo: "siena-shinsegae-2023", line: "분홍 타일 벽과 흰 커튼으로 입구를 무대처럼 세웠습니다." },
 ];
+
+export function portfolioMeta(p: PortfolioCase) {
+  return `${p.kind} · ${p.place} · ${p.pyeong}평 · ${p.year}`;
+}
 
 // 시공 회사 실명 — 사례 캡션·증거 줄에 같은 표기를 쓴다.
 export const BUILDER = "(주)디자인드비";
+export const BUILDER_ADDRESS = "서울 서초구 강남대로23길 26";
 
 export function portfolioImage(image: string) {
   return {
