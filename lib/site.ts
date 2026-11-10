@@ -103,6 +103,7 @@ export const navItems = [
 export const footerNavItems = [
   { href: "/portfolio", label: "시공 사례" },
   { href: "/insights", label: "인사이트" },
+  { href: "/service", label: "서비스" },
   { href: "/company", label: "회사 소개" },
   { href: "/#apply", label: "상담" },
 ] as const;
