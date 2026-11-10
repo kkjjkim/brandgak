@@ -1,5 +1,6 @@
 "use client";
 
+import { ConsentNotice } from "@/components/home/consent-notice";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
@@ -64,6 +65,8 @@ export function LeadForm({
   const honeypotRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState<Form>({ ...initial, ...defaults });
   const [loading, setLoading] = useState(false);
+  const [consentPrivacy, setConsentPrivacy] = useState(false);
+  const [consentPartner, setConsentPartner] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const captchaRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -158,6 +161,10 @@ export function LeadForm({
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!consentPrivacy || !consentPartner) {
+      setError("개인정보 수집·이용과 시공사 제공에 동의해 주세요.");
+      return;
+    }
     setError(null);
     setLoading(true);
     track("form_submit", { form_type: formType });
@@ -348,13 +355,18 @@ export function LeadForm({
         </p>
       )}
 
+      <ConsentNotice
+        privacy={consentPrivacy}
+        partner={consentPartner}
+        onPrivacy={setConsentPrivacy}
+        onPartner={setConsentPartner}
+      />
       <div>
         <Button type="submit" size="lg" className="w-full" disabled={loading}>
           {loading ? "보내는 중…" : "무료 상담 문의"}
         </Button>
-        {/* PRD 원문 — 남기기 전의 마지막 망설임(영업 전화·계약 압박)을 없앤다 */}
         <p className="mt-3 text-center text-sm text-muted-foreground">
-          영업 전화 없음 · 상담 후 결정은 자유
+          영업일 하루 안에 경영지도사가 직접 전화드립니다.
         </p>
       </div>
     </form>

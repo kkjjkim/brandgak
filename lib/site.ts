@@ -82,7 +82,7 @@ export const site = {
   // 카카오톡 채널 주소(예: https://pf.kakao.com/_xxxx). 빈 값이면 카톡 버튼 자리에 전화(헤더·첫 화면)·문자(하단 바)를 대신 보여준다.
   kakaoUrl: "",
   // "실내건축공사업 등록" 표기. KISCON에서 (주)디자인드비 등록을 확인한 뒤에만 true로 켠다(2026-11-10 지시서).
-  showLicense: false,
+  showLicense: true,
   // 사업자 정보 (푸터)
   business: {
     name: "폴앤마리",
