@@ -59,12 +59,12 @@ export default function CompanyPage() {
       <JsonLd data={breadcrumbLd([{ name: "회사 소개", path: "/company" }])} />
 
       <PageHero
-        image="/concepts/board-roastery-1600.webp"
-        imageSrcSet="/concepts/board-roastery-960.webp 960w, /concepts/board-roastery-1600.webp 1600w"
+        image="/portfolio/siena-lotte-jamsil-1600.webp"
+        imageSrcSet="/portfolio/siena-lotte-jamsil-960.webp 960w, /portfolio/siena-lotte-jamsil-1600.webp 1600w"
         eyebrow="회사 소개"
         title="가게의 각을 잡는 사람들."
         subtitle="'각을 잡는다'는 흐트러진 것을 바로 세운다는 뜻입니다. 브랜드각은 자리·예산·컨셉·공간이 한 방향을 보도록 맞추는 일을 합니다."
-        note="컨셉 분위기 예시입니다."
+        note="THE SIENA 롯데 잠실 · 시공 (주)디자인드비"
       />
 
       {/* 팀 */}

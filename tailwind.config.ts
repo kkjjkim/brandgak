@@ -54,7 +54,7 @@ const config: Config = {
         sans: ["var(--font-sans)", "Pretendard", "system-ui", "sans-serif"],
         serif: ["var(--font-sans)", "Pretendard", "system-ui", "sans-serif"],
         // 큰 제목 명조 (Noto Serif KR) — font-display
-        display: ["var(--font-display)", "Noto Serif KR", "serif"],
+        display: ["var(--font-sans)", "Pretendard", "system-ui", "sans-serif"], // 11/10 B안: 명조 제목 제거(AI 템플릿 느낌)
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -51,12 +51,12 @@ export default function ServicePage() {
       <JsonLd data={breadcrumbLd([{ name: "서비스", path: "/service" }])} />
 
       <PageHero
-        image="/hero/stage-night-1920.webp"
-        imageSrcSet="/hero/stage-night-1280.webp 1280w, /hero/stage-night-1920.webp 1920w"
+        image="/portfolio/bbw-centum-1600.webp"
+        imageSrcSet="/portfolio/bbw-centum-960.webp 960w, /portfolio/bbw-centum-1600.webp 1600w"
         eyebrow="서비스"
         title="사업과 공간을, 한 테이블에서."
         subtitle="창업 컨설팅과 브랜드 컨설팅은 국가공인 경영지도사가, 공간 설계와 시공은 백화점·대형 쇼핑몰 브랜드 매장을 시공해 온 팀이 맡습니다."
-        note="컨셉 분위기 예시입니다."
+        note="Bath & Body Works 신세계 센텀시티 · 시공 (주)디자인드비"
       />
 
       <Section>
