@@ -79,6 +79,10 @@ export const site = {
   // 상담 알림 메일 제목 앞에 붙는 프로젝트 식별 태그.
   // 여러 프로젝트를 운영할 때 메일함에서 어느 사이트에서 온 신청인지 구분하기 위함.
   mailTag: "브랜드각",
+  // 카카오톡 채널 주소(예: https://pf.kakao.com/_xxxx). 빈 값이면 카톡 버튼 자리에 전화(헤더·첫 화면)·문자(하단 바)를 대신 보여준다.
+  kakaoUrl: "",
+  // "실내건축공사업 등록" 표기. KISCON에서 (주)디자인드비 등록을 확인한 뒤에만 true로 켠다(2026-11-10 지시서).
+  showLicense: false,
   // 사업자 정보 (푸터)
   business: {
     name: "폴앤마리",
@@ -88,11 +92,18 @@ export const site = {
   },
 } as const;
 
+// 머리말 메뉴 — 2026-11-10 홈 개편: 시공 사례 · 인사이트 · 상담 세 개만.
 export const navItems = [
-  { href: "/", label: "홈" },
-  { href: "/diagnosis", label: "컨셉 진단" },
+  { href: "/portfolio", label: "시공 사례" },
+  { href: "/insights", label: "인사이트" },
+  { href: "/#apply", label: "상담" },
+] as const;
+
+// 바닥글 메뉴 — 서브 페이지가 검색엔진에 계속 연결되도록 머리말보다 넓게 둔다.
+// 컨셉 진단은 인사이트 글에서만 연결한다(2026-11-10 지시서).
+export const footerNavItems = [
+  { href: "/portfolio", label: "시공 사례" },
   { href: "/service", label: "서비스" },
-  { href: "/concepts", label: "컨셉" },
   { href: "/insights", label: "인사이트" },
   { href: "/company", label: "회사 소개" },
   { href: "/#apply", label: "상담 신청" },

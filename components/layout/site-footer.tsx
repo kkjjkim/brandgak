@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Instagram } from "lucide-react";
-import { site, navItems } from "@/lib/site";
+import { site, footerNavItems } from "@/lib/site";
 import { INDUSTRIES } from "@/lib/industries";
 
 export function SiteFooter() {
@@ -15,7 +15,7 @@ export function SiteFooter() {
         </div>
         <div className="md:text-right">
           <nav className="flex flex-wrap gap-x-6 gap-y-2 md:justify-end">
-            {navItems.map((item) => (
+            {footerNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

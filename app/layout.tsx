@@ -65,7 +65,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" className={notoSerif.variable}>
-      <body className="min-h-screen">
+      <body className="min-h-screen pb-14 md:pb-0">
         <JsonLd data={localBusinessLd()} />
         <JsonLd data={websiteLd()} />
         <JsonLd data={serviceLd()} />
