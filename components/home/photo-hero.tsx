@@ -24,7 +24,7 @@ export function PhotoHero() {
           감이 안 오시죠?
         </h1>
         <p className="mb-5 mt-3 text-[15px] leading-[1.7] text-[#444] md:text-[17px]">
-          첫 상담에 사장님 가게로 그린 컨셉 한 장을 들고 갑니다.
+          사장님 가게 이야기부터 듣고, 그 가게에 맞는 방향을 같이 잡습니다.
         </p>
         <div className="md:max-w-sm">
           <a

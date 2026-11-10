@@ -8,7 +8,7 @@ export function HomeNote() {
       <div className="max-w-2xl border-t border-border pt-8 text-[15px] leading-[1.8] text-[#333] md:pt-12">
         <p>처음 가게를 여는 분들이 자주 하는 말이 있습니다. &ldquo;포트폴리오만 봐서는 감이 안 와요.&rdquo;</p>
         <p className="mt-[1.8em]">
-          그래서 첫 상담에 그 가게로 그린 컨셉 한 장을 들고 갑니다. 손님이 그 가게를 어떻게 기억할지, 정해 주신 예산 안에서 어디에 힘을 줄지까지.
+          그래서 저희는 사진보다 사장님 가게 이야기부터 듣습니다. 어떤 손님이 오는 가게인지, 정해 주신 예산 안에서 어디에 힘을 줄지.
         </p>
         <p className="mt-[1.8em]">
           사업 쪽은 <b className="font-bold text-foreground">국가공인 경영지도사</b>가, 공간은 위 매장들을 지은{" "}
