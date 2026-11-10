@@ -75,7 +75,10 @@ function escapeHtml(v: unknown): string {
 }
 
 // 운영자에게 신규 상담 알림 메일 발송. 실패해도 신청 저장은 성공 처리.
-async function notifyOwner(lead: Record<string, unknown>, opts: { unverified?: boolean } = {}) {
+async function notifyOwner(
+  lead: Record<string, unknown>,
+  opts: { unverified?: boolean; dbFailed?: boolean } = {}
+) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.LEAD_NOTIFY_TO;
   if (!apiKey || !to) return;
@@ -103,7 +106,7 @@ async function notifyOwner(lead: Record<string, unknown>, opts: { unverified?: b
       from,
       to: to.split(",").map((s) => s.trim()),
       // 제목은 HTML이 아니라 이스케이프 불필요. 줄바꿈만 제거(헤더 삽입 방지).
-      subject: `${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 새 상담 신청] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
+      subject: `${opts.dbFailed ? "[DB 미저장·메일만] " : ""}${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 새 상담 신청] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
       html: `<h2>[${site.mailTag}] 새 무료 컨셉 상담 신청</h2><table cellpadding="6">${rows}</table>`,
     });
   } catch (err) {
@@ -210,18 +213,16 @@ export async function POST(req: NextRequest) {
     );
 
     if (error) {
-      console.error("Supabase insert 실패:", error);
-      return NextResponse.json(
-        { error: "저장 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요." },
-        { status: 500 }
-      );
+      // DB가 멈춰도(무료 플랜 일시정지 등) 손님 신청은 잃지 않는다: 메일로 대신 받는다.
+      // 2026-11-04 DB 일시정지 뒤 모든 신청이 500으로 사라진 일의 교훈.
+      console.error("Supabase insert 실패 → 메일로 대체 접수:", error);
+      await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true });
+      return NextResponse.json({ ok: true, stored: "email" });
     }
   } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { error: "서버 설정 오류입니다. 운영자에게 문의해주세요." },
-      { status: 500 }
-    );
+    console.error("Supabase 연결 실패 → 메일로 대체 접수:", err);
+    await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true });
+    return NextResponse.json({ ok: true, stored: "email" });
   }
 
   // 7) 정상 건만 알림 메일 (의심 건은 저장만, 알림 없음)
