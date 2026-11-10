@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ import { cn } from "@/lib/utils";
 type Item = { name: string; industry: string; at: string };
 
 export function RecentLeadsToast() {
+  const pathname = usePathname();
   const [items, setItems] = useState<Item[]>([]);
   const [idx, setIdx] = useState(0);
   const [show, setShow] = useState(false);
@@ -46,7 +48,8 @@ export function RecentLeadsToast() {
     };
   }, [items, idx]);
 
-  if (items.length === 0) return null;
+  // 홈에서는 숨긴다(2026-11-10 B안 — 떠다니는 알림이 "AI로 만든 티"의 하나였다)
+  if (items.length === 0 || pathname === "/") return null;
   const it = items[idx];
 
   return (

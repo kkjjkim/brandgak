@@ -92,21 +92,19 @@ export const site = {
   },
 } as const;
 
-// 머리말 메뉴 — 2026-11-10 홈 개편: 시공 사례 · 인사이트 · 상담 세 개만.
+// 머리말 메뉴 — 2026-11-10 B안: 시공 사례 · 상담 두 개만. 인사이트는 꼬리말에서 연결.
 export const navItems = [
   { href: "/portfolio", label: "시공 사례" },
-  { href: "/insights", label: "인사이트" },
   { href: "/#apply", label: "상담" },
 ] as const;
 
-// 바닥글 메뉴 — 서브 페이지가 검색엔진에 계속 연결되도록 머리말보다 넓게 둔다.
-// 컨셉 진단은 인사이트 글에서만 연결한다(2026-11-10 지시서).
+// 바닥글 메뉴 — B안 지시서(2026-11-10)의 네 개. 컨셉 진단은 인사이트 글에서만 연결한다.
+// 서비스(/service)는 이제 사이트맵에만 있다 — 다시 넣을지는 대표 확인 필요(docs/redesign-1110-b-result.md).
 export const footerNavItems = [
   { href: "/portfolio", label: "시공 사례" },
-  { href: "/service", label: "서비스" },
   { href: "/insights", label: "인사이트" },
   { href: "/company", label: "회사 소개" },
-  { href: "/#apply", label: "상담 신청" },
+  { href: "/#apply", label: "상담" },
 ] as const;
 
 export const CTA_LABEL = "무료 상담 문의";
