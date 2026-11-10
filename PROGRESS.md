@@ -371,6 +371,12 @@
 - **조치(7aba896, main 배포)**: insert 실패·연결 실패 시 운영자 메일로 대체 접수(제목 `[DB 미저장·메일만]`) 후 200. 운영 시험 1건 kkjjkim 메일 수신 확인(10:18).
 - **다음**: 접수처를 Supabase 대신 구글시트(Apps Script, 원탑 홈페이지 방식)로 옮기는 안을 대표 결정 대기. 주간 점검은 recent-leads 0건만 보지 말고 /api/health 결과도 볼 것.
 
+### 2026-11-10 (화) — 홈 개편 (브랜치 redesign-1110, 배포 안 함)
+- **끝낸 것**: 지시서(`docs/redesign-1110-spec.md`)대로 홈을 실제 시공 사진 한 장+짧은 문장으로, 직접 시공 8건 `/portfolio`, 새 신청 폼(동의 2개),
+  머리말 메뉴 3개·휴대폰 하단 바, 회사소개·서비스·인사이트 5편에서 발목 잡는 문장 덜어냄. 타입체크·린트·빌드 통과, 화면 글 금지어 0건.
+- **다음**: 390/1280 화면 직접 확인(이번엔 브라우저가 샌드박스에서 죽어 못 함), 카카오 채널 주소·KISCON 확인 뒤 `lib/site.ts` 두 값 켜기, 대표 검토 뒤 main 합치기.
+  자세한 건 `docs/redesign-1110-result.md`.
+
 ## 다음 할 것 (운영자/대표님)
 - [ ] Supabase 프로젝트 생성 → `supabase/schema.sql` 실행 → `.env.local` 에 URL/anon 키 입력
 - [ ] Resend 가입 → 도메인 인증 → `RESEND_API_KEY`, `LEAD_NOTIFY_TO`, `LEAD_NOTIFY_FROM` 입력
