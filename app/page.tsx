@@ -10,9 +10,10 @@ import { site } from "@/lib/site";
 // FAQ 구조화 데이터도 같이 뺐다 — 화면에 없는 질문을 데이터로만 내보내면 검색 지침 위반이다.
 
 export const metadata: Metadata = {
-  title: "창업 컨설팅·브랜드 컨설팅·공간 디자인 | 브랜드각",
+  // 2026-11-17: 검색 결과에서도 "인테리어 디자인·시공" 회사로 보이게(예전 제목은 창업 컨설팅이 맨 앞이었다).
+  title: "매장 인테리어 디자인·시공 | 브랜드각",
   description:
-    "국가공인 경영지도사가 창업·사업 전략부터 브랜드 컨셉, 공간 디자인·인테리어 시공까지 한 흐름으로 함께합니다. 창업 첫걸음부터 오픈까지, 전국 상담.",
+    "카페·식당·뷰티·리테일 매장의 인테리어 디자인과 시공. Bath & Body Works·THE SIENA 매장을 시공한 (주)디자인드비가 짓고, 경영지도사가 상담부터 함께합니다.",
   alternates: {
     canonical: "/",
     types: { "application/rss+xml": `${site.url}/feed.xml` },
@@ -28,7 +29,7 @@ export default function HomePage() {
 
       <section id="apply" className="container scroll-mt-20 pt-9 md:pt-24">
         <div className="max-w-2xl">
-          <h2 className="mb-[18px] text-[20px] font-bold tracking-[-0.02em] md:text-[28px]">어떤 가게를 준비하세요?</h2>
+          <h2 className="mb-[18px] text-[20px] font-bold tracking-[-0.02em] md:text-[28px]">어떤 매장을 준비하세요?</h2>
           <ApplyForm />
         </div>
       </section>

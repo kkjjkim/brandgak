@@ -278,7 +278,7 @@ export function diagnose(a: Answers): Result {
 
   // 대표님이 상담 전에 상황을 바로 파악할 수 있도록 한 문단으로 정리한다.
   const summary = [
-    `[컨셉 진단 결과]`,
+    `[진단에서 고른 답]`,
     `업종: ${labelOf("industry", a.industry)}`,
     `단계: ${labelOf("stage", a.stage)}`,
     `규모: ${labelOf("size", a.size)}`,

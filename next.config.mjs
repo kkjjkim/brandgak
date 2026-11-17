@@ -5,7 +5,8 @@
 // HSTS는 Vercel이 자동으로 붙인다.
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
-  { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+  // object-src·base-uri·form-action 은 인라인 스크립트(GA4·Turnstile)를 건드리지 않으면서 플러그인 삽입·<base> 바꿔치기·폼 가로채기를 막는다(2026-11-17).
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },

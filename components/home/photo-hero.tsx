@@ -1,4 +1,4 @@
-import { site } from "@/lib/site";
+import { CTA_LABEL, site } from "@/lib/site";
 import { portfolioImage } from "@/lib/portfolio";
 
 // 홈 첫 화면 — 직접 시공한 매장 사진 한 장(캡션 없음) + 짧은 소개 (2026-11-10 B안 시안 mockB).
@@ -18,6 +18,8 @@ export function PhotoHero() {
       />
 
       <div className="container pb-2 pt-7 md:pt-14">
+        {/* 2026-11-17: 첫 화면에서 "무엇을 하는 곳인지"가 안 보였다(헤드라인이 질문뿐). 한 줄로 업종을 밝힌다. */}
+        <p className="mb-2 text-[13px] tracking-[0.01em] text-[#666] md:text-[14px]">매장 인테리어 디자인 · 시공</p>
         <h1 className="text-[25px] font-bold leading-[1.4] tracking-[-0.03em] md:text-[40px]">
           포트폴리오만 봐서는
           <br />
@@ -31,7 +33,7 @@ export function PhotoHero() {
             href="#apply"
             className="block bg-primary py-[15px] text-center text-[15px] font-semibold text-primary-foreground hover:bg-primary/85"
           >
-            무료 상담 신청
+            {CTA_LABEL}
           </a>
           <a
             href={`tel:${site.business.phone}`}

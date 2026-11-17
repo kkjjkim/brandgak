@@ -8,18 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { BUDGET_OPTIONS } from "@/lib/leads";
+import { ChoiceChips } from "@/components/home/choice-chips";
+import { START_TIMING, WORK_TYPES } from "@/lib/leads";
 import { readSource } from "@/lib/attribution";
-import { site } from "@/lib/site";
+import { CTA_LABEL, site } from "@/lib/site";
 import { track } from "@/lib/track";
 
+// 2026-11-17: 예산 칸을 빼고 인테리어 상담에 필요한 공사 구분·시작 시기를 칩으로 묻는다(홈 폼과 같은 항목).
 type Form = {
   name: string;
   phone: string;
   industry: string;
   location: string;
-  budget: string;
+  workType: string;
+  start: string;
   message: string;
 };
 
@@ -28,9 +30,20 @@ const initial: Form = {
   phone: "",
   industry: "",
   location: "",
-  budget: "",
+  workType: "",
+  start: "",
   message: "",
 };
+
+function buildMessage(f: Form) {
+  return [
+    f.workType && `[공사 구분] ${f.workType}`,
+    f.start && `[공사 시작 희망] ${f.start}`,
+    f.message.trim(),
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
 
 // 봇 방지 캡차(Cloudflare Turnstile) 사이트 키(공개용) — 없으면 캡차 없이 동작.
 const TURNSTILE_SITE_KEY =
@@ -187,7 +200,11 @@ export function LeadForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...form,
+          name: form.name,
+          phone: form.phone,
+          industry: form.industry,
+          location: form.location,
+          message: buildMessage(form),
           source,
           company_website: honeypotRef.current?.value || "", // 허니팟
           captchaToken,
@@ -273,7 +290,7 @@ export function LeadForm({
       <details className={compact ? "group" : "contents"} open={!compact || undefined}>
         {compact && (
           <summary className="cursor-pointer list-none text-sm font-medium text-foreground/70 underline-offset-4 hover:text-primary hover:underline">
-            위치·평수·예산도 적어두기 (선택)
+            공사 구분·위치·평수도 적어두기 (선택)
           </summary>
         )}
         <div className={compact ? "mt-5 grid gap-5" : "contents"}>
@@ -298,29 +315,17 @@ export function LeadForm({
         </div>
       </div>
 
-      <div className="grid gap-2">
-        <Label htmlFor="budget">예산대 (선택)</Label>
-        <Select
-          id="budget"
-          value={form.budget}
-          onChange={(e) => set("budget", e.target.value)}
-        >
-          <option value="">선택 안 함</option>
-          {BUDGET_OPTIONS.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </Select>
-      </div>
+      <ChoiceChips name="work_type" legend="공사 구분" options={WORK_TYPES} value={form.workType} onChange={(v) => set("workType", v)} />
+
+      <ChoiceChips name="start" legend="공사 시작 희망" options={START_TIMING} value={form.start} onChange={(v) => set("start", v)} />
 
       <div className="grid gap-2">
-        <Label htmlFor="message">하고 싶은 가게 한 줄</Label>
+        <Label htmlFor="message">원하는 분위기나 참고하는 매장 (선택)</Label>
         <Textarea
           id="message"
           value={form.message}
           onChange={(e) => set("message", e.target.value)}
-          placeholder='"이런 가게 하고 싶다" 한마디면 충분해요.'
+          placeholder="예: 원목에 밝은 톤, 오래 머무는 카페"
         />
       </div>
         </div>
@@ -363,10 +368,10 @@ export function LeadForm({
       />
       <div>
         <Button type="submit" size="lg" className="w-full" disabled={loading}>
-          {loading ? "보내는 중…" : "무료 상담 문의"}
+          {loading ? "보내는 중…" : CTA_LABEL}
         </Button>
         <p className="mt-3 text-center text-sm text-muted-foreground">
-          영업일 하루 안에 경영지도사가 직접 전화드립니다.
+          상담은 무료입니다. 영업일 하루 안에 직접 전화드립니다.
         </p>
       </div>
     </form>

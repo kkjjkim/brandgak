@@ -4,6 +4,7 @@ import { Section } from "@/components/section";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { buttonVariants } from "@/components/ui/button";
+import { CTA_LABEL } from "@/lib/site";
 import { CHECKLIST, CHECKLIST_COUNT, CHECKLIST_SUBTITLE, CHECKLIST_TITLE } from "@/lib/checklist";
 
 // 체크리스트 자료 페이지. 글 끝에서 이메일을 남긴 사람에게 메일로 이 주소를 보낸다.
@@ -50,12 +51,12 @@ export default function ChecklistPage() {
             ))}
           </ol>
           <div className="mt-14 rounded-lg border border-border bg-secondary/40 p-6 md:p-8 print:hidden">
-            <p className="text-lg font-semibold leading-snug">체크하다 막히는 항목이 있으면</p>
+            <p className="text-lg font-semibold leading-snug">자리를 정하셨다면, 다음은 공사입니다</p>
             <p className="mt-2 text-sm text-foreground/70">
-              그 자리에 내 업종이 되는지, 권리금이 맞는 값인지, 계약서에 뭘 넣어야 하는지 — 계약 전에 같이 봐드립니다. 비용은 없습니다.
+              브랜드각은 매장 인테리어를 디자인하고 시공합니다. 그 자리에 맞는 배치와 공사 범위를 상담에서 같이 봅니다. 상담은 무료입니다.
             </p>
             <Link href="/#apply" className={buttonVariants({ className: "mt-5" })} data-cta="checklist_apply">
-              무료 상담 문의
+              {CTA_LABEL}
             </Link>
           </div>
         </div>

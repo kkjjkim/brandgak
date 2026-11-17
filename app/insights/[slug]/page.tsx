@@ -5,7 +5,7 @@ import { marked } from "marked";
 import { Section } from "@/components/section";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
-import { InsightDiagnosisCard } from "@/components/insight-diagnosis-card";
+import { InsightWorkCard } from "@/components/insight-work-card";
 import { ReadTracker } from "@/components/read-tracker";
 import { JsonLd } from "@/components/json-ld";
 import { articleLd, breadcrumbLd, faqLd } from "@/lib/seo";
@@ -48,13 +48,15 @@ export function generateMetadata({
 
 // 글 끝 상담 제안 — 읽은 글의 상황에서 바로 받을 수 있는 것 한 줄. 상담은 원래 무료라 지어낸 약속이 아니다.
 // "무료 상담 문의"만으로는 진단 완료 5명 중 제출 0(10/21 실측) → 무엇을 봐 주는지 구체적으로 말한다(2026-10-27).
+// 2026-11-17: 제안은 모두 "인테리어 상담"으로 모은다. 예전 문구(권리금·특약 검토, 견적서 검토, 이름 골라드림)는
+// 인테리어와 상관없는 문의를 부르고, 견적 검토는 대표가 접은 방향이다(11/10). 상담에서 실제로 하는 일만 적는다.
 const OFFER_BY_CATEGORY: Record<string, string> = {
-  "창업 컨설팅": "보고 계신 자리가 있으면 계약 전에 봐드립니다. 이 자리에서 내 업종이 되는지, 권리금이 맞는 값인지, 특약에 뭘 넣어야 하는지.",
-  "인테리어": "받으신 견적서나 계약서를 보내 주시면 빠진 항목과 위험한 조항을 짚어드립니다. 업체를 아직 못 정했어도 됩니다.",
-  "공간 디자인": "평수와 도면(또는 사진)만 있어도 주방·좌석·동선을 같이 그려봅니다. 공사 전에 바꾸면 돈이 안 듭니다.",
-  "브랜드 컨설팅": "이름·컨셉 후보가 있으면 손님 눈으로 같이 골라드립니다. 아직 막연해도 한 줄이면 시작됩니다.",
+  "창업 컨설팅": "자리를 보고 계시거나 정하셨다면, 그 자리에 맞는 매장 배치와 공사 범위를 상담에서 같이 봅니다.",
+  "인테리어": "업종과 평수, 공사 시작 시기만 알려주세요. 그 매장에 맞는 디자인 방향과 진행 순서를 상담에서 같이 잡습니다.",
+  "공간 디자인": "도면이나 현장 사진이 있으면 상담 때 같이 보며 좌석·동선·주방 배치를 이야기합니다.",
+  "브랜드 컨설팅": "이름과 분위기가 정해졌다면 다음은 그게 보이는 공간입니다. 간판부터 매장 안까지 한 방향으로 디자인하고 시공합니다.",
 };
-const OFFER_DEFAULT = "머릿속 구상만 들고 오세요. 자리·예산·컨셉부터 같이 잡고, 진행 여부는 그다음에 정하시면 됩니다.";
+const OFFER_DEFAULT = "업종과 평수만 알려주세요. 그 매장에 맞는 디자인 방향과 진행 순서를 상담에서 같이 잡습니다.";
 
 export default function InsightPage({ params }: { params: { slug: string } }) {
   const post = getInsight(params.slug);
@@ -84,7 +86,7 @@ export default function InsightPage({ params }: { params: { slug: string } }) {
           className="prose-insight mx-auto max-w-2xl"
           dangerouslySetInnerHTML={{ __html: htmlTop }}
         />
-        <InsightDiagnosisCard />
+        <InsightWorkCard />
         {htmlRest && (
           <article
             className="prose-insight mx-auto max-w-2xl"

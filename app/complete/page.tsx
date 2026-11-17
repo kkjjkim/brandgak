@@ -21,13 +21,16 @@ export default function CompletePage() {
           신청 완료됐습니다.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-foreground/70">
-          영업일 하루 안에 경영지도사가 직접 전화드릴게요. 그동안 머릿속 구상을 편하게 정리해 두세요.
+          영업일 하루 안에 직접 전화드릴게요. 매장 도면이나 현장 사진, 참고하는 매장 사진이 있으면 통화 때 같이 보면 더 구체적으로 이야기할 수 있습니다.
         </p>
         <Link
           href="/"
           className={buttonVariants({ variant: "outline", className: "mt-10" })}
         >
           홈으로 돌아가기
+        </Link>
+        <Link href="/portfolio" className="ml-3 mt-10 inline-block py-2 text-[14px] underline underline-offset-4">
+          시공 사례 보기
         </Link>
       </div>
     </section>

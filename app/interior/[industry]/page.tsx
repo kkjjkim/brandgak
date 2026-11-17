@@ -143,10 +143,10 @@ export default function IndustryPage({
 
           <div className="mt-10">
             <Link
-              href="/diagnosis"
+              href="/portfolio"
               className="inline-flex items-center gap-2 font-medium text-primary underline-offset-4 hover:underline"
             >
-              1분 컨셉 진단으로 지금 단계부터 확인해보기 →
+              직접 시공한 매장 보기 →
             </Link>
           </div>
         </div>
@@ -212,13 +212,13 @@ export default function IndustryPage({
       {/* 상담 — 업종은 이미 채워둔다 */}
       <Section id="apply">
         <div className="mx-auto max-w-2xl">
-          <Eyebrow>무료 상담</Eyebrow>
+          <Eyebrow>인테리어 상담</Eyebrow>
           <h2 className="mt-6 font-display text-3xl font-semibold leading-snug md:text-4xl">
             {ind.keyword}, 도면 전에 같이 보시죠
           </h2>
           <p className="mt-5 leading-relaxed text-muted-foreground">
-            아직 정리가 안 되셨어도 괜찮습니다. &ldquo;이런 가게를 하고
-            싶다&rdquo;는 구상만 있으면 됩니다.
+            업종과 평수, 공사 시작 시기만 알려주세요. 그 매장에 맞는 디자인
+            방향과 진행 순서를 상담에서 같이 잡습니다. 상담은 무료입니다.
           </p>
 
           <div className="mt-10">

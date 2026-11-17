@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { site } from "@/lib/site";
+import { checkOrigin } from "@/lib/origin";
 import { CHECKLIST, CHECKLIST_COUNT, CHECKLIST_TITLE } from "@/lib/checklist";
 
 export const runtime = "nodejs";
@@ -45,8 +46,8 @@ function emailHtml(): string {
     `<p style="margin:0 0 16px;color:#555">자리 보러 가기 전부터 계약 직후까지 ${CHECKLIST_COUNT}가지입니다. 인쇄용 화면은 아래 버튼에 있습니다.</p>` +
     `<p style="margin:0 0 24px"><a href="${url}" style="display:inline-block;background:#111;color:#fff;text-decoration:none;padding:12px 20px;border-radius:6px;font-weight:600">체크리스트 열기 (인쇄용)</a></p>` +
     groups +
-    `<p style="margin:24px 0 0;color:#555">체크하다 막히는 항목이 있으면 계약 전에 같이 봐드립니다. 비용은 없습니다. ` +
-    `<a href="${site.url}/#apply" style="color:#111">무료 상담 문의 →</a></p>` +
+    `<p style="margin:24px 0 0;color:#555">자리를 정하신 뒤 매장 인테리어가 필요하시면 상담해 드립니다. 상담은 무료입니다. ` +
+    `<a href="${site.url}/#apply" style="color:#111">인테리어 상담 신청 →</a></p>` +
     `<p style="margin:24px 0 0;font-size:12px;color:#888">브랜드각 · ${escapeHtml(site.business.name)} · ${escapeHtml(site.business.address)}<br>` +
     `새 글 안내 메일은 가끔 보내며, 메일 아래 링크로 언제든 그만 받을 수 있습니다.</p>` +
     `</div>`
@@ -54,12 +55,26 @@ function emailHtml(): string {
 }
 
 // 배포 확인용. 코드를 바꾼 뒤 운영에 새 판이 떴는지 이 값으로 본다(Vercel 배포 완료 신호가 따로 없다).
-const VERSION = "2026-10-27.4";
+const VERSION = "2026-11-17.1";
 export async function GET() {
   return NextResponse.json({ ok: true, version: VERSION }, { headers: { "Cache-Control": "no-store" } });
 }
 
+// 같은 주소로 하루에 한 번만 보낸다 — 남의 이메일을 넣어 우리 도메인으로 메일 폭탄을 보내는 악용 방지(2026-11-17 보안 점검).
+const SENT = new Map<string, number>();
+function alreadySent(email: string): boolean {
+  const now = Date.now();
+  const last = SENT.get(email);
+  if (last && now - last < 24 * 60 * 60 * 1000) return true;
+  SENT.set(email, now);
+  return false;
+}
+
 export async function POST(req: NextRequest) {
+  // 메일을 실제로 보내는 길이라 출처가 우리 사이트가 아니면(출처 없음 포함) 받지 않는다.
+  if (checkOrigin(req) !== "ok") {
+    return NextResponse.json({ error: "잘못된 요청입니다." }, { status: 403 });
+  }
   let body: unknown;
   try {
     body = await req.json();
@@ -82,6 +97,11 @@ export async function POST(req: NextRequest) {
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
   if (rateLimited(ip)) {
     return NextResponse.json({ error: "요청이 너무 많아요. 잠시 후 다시 시도해 주세요." }, { status: 429 });
+  }
+
+  if (alreadySent(email)) {
+    // 이미 오늘 보낸 주소 — 다시 보내지 않지만 손님에게는 성공으로 보여준다(메일함 확인 안내는 화면에 있다).
+    return NextResponse.json({ ok: true, deduped: true });
   }
 
   const apiKey = process.env.RESEND_API_KEY;

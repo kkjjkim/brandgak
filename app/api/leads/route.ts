@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { leadSchema } from "@/lib/leads";
 import { getSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase";
 import { site } from "@/lib/site";
+import { checkOrigin } from "@/lib/origin";
 
 export const runtime = "nodejs";
 
@@ -17,6 +18,17 @@ function rateLimited(ip: string): boolean {
   arr.push(now);
   HITS.set(ip, arr);
   return arr.length > RL_MAX;
+}
+
+// 캡차 없이 들어오는 신청(captchaUnavailable)은 봇이 흉내 내기 쉬운 길이라 더 좁게 막는다(2026-11-17 보안 점검).
+// 같은 IP 10분에 2건까지만 받고, 그 이상은 전화·문자로 안내한다.
+const UNVERIFIED_HITS = new Map<string, number[]>();
+function unverifiedLimited(ip: string): boolean {
+  const now = Date.now();
+  const arr = (UNVERIFIED_HITS.get(ip) || []).filter((t) => now - t < RL_WINDOW_MS);
+  arr.push(now);
+  UNVERIFIED_HITS.set(ip, arr);
+  return arr.length > 2;
 }
 
 function clientIp(req: NextRequest): string {
@@ -77,7 +89,7 @@ function escapeHtml(v: unknown): string {
 // 운영자에게 신규 상담 알림 메일 발송. 실패해도 신청 저장은 성공 처리.
 async function notifyOwner(
   lead: Record<string, unknown>,
-  opts: { unverified?: boolean; dbFailed?: boolean } = {}
+  opts: { unverified?: boolean; dbFailed?: boolean; flags?: string[] } = {}
 ) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.LEAD_NOTIFY_TO;
@@ -99,15 +111,16 @@ async function notifyOwner(
       ["유입", lead.source],
     ]
       .filter(([, v]) => v)
-      .map(([k, v]) => `<tr><td><b>${k}</b></td><td>${escapeHtml(v)}</td></tr>`)
+      // 신청 내용은 여러 줄(공사 구분·평수·시기…)이라 줄바꿈을 살린다(이스케이프 뒤에 바꿔 태그 삽입은 막힌다).
+      .map(([k, v]) => `<tr><td valign="top"><b>${k}</b></td><td>${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`)
       .join("");
 
     await resend.emails.send({
       from,
       to: to.split(",").map((s) => s.trim()),
       // 제목은 HTML이 아니라 이스케이프 불필요. 줄바꿈만 제거(헤더 삽입 방지).
-      subject: `${opts.dbFailed ? "[DB 미저장·메일만] " : ""}${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 새 상담 신청] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
-      html: `<h2>[${site.mailTag}] 새 무료 컨셉 상담 신청</h2><table cellpadding="6">${rows}</table>`,
+      subject: `${opts.flags?.length ? `[의심:${opts.flags.join(",")}] ` : ""}${opts.dbFailed ? "[DB 미저장·메일만] " : ""}${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 인테리어 상담] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
+      html: `<h2>[${site.mailTag}] 새 인테리어 상담 신청</h2><table cellpadding="6">${rows}</table>`,
     });
   } catch (err) {
     console.error("알림 메일 발송 실패:", err);
@@ -126,6 +139,12 @@ async function insertLead(row: Record<string, unknown>, status: string) {
 }
 
 export async function POST(req: NextRequest) {
+  // 0) 다른 사이트에서 보낸 요청은 거절(출처 없음은 표시만 — lib/origin.ts)
+  const origin = checkOrigin(req);
+  if (origin === "foreign") {
+    return NextResponse.json({ error: "잘못된 요청입니다." }, { status: 403 });
+  }
+
   let body: Record<string, unknown>;
   try {
     body = await req.json();
@@ -151,6 +170,12 @@ export async function POST(req: NextRequest) {
   // 허니팟·휴대폰 형식·중복 검사는 그대로 두고 접수하되, 알림 메일 제목에 [캡차 미확인]을 붙여 대표가 거른다.
   // (2026-10-11 대표 결정. 스팸이 늘면 이 분기만 지우면 원래대로 막힌다)
   const captchaUnverified = !token && body.captchaUnavailable === true;
+  if (captchaUnverified && unverifiedLimited(ip)) {
+    return NextResponse.json(
+      { error: `잠시 뒤 다시 시도해 주세요. 급하시면 ${site.business.phone}로 전화·문자 주세요.` },
+      { status: 429 }
+    );
+  }
   const captcha = captchaUnverified ? "ok" : await verifyTurnstile(token, ip);
   if (captcha === "bad-token") {
     return NextResponse.json(
@@ -188,6 +213,7 @@ export async function POST(req: NextRequest) {
   if ([...counts.values()].some((c) => c >= 2)) flags.push("repeat");
 
   if (rateLimited(ip)) flags.push("rate");
+  if (origin === "missing") flags.push("noorigin");
 
   const status = flags.length > 0 ? "의심" : "정상";
 
@@ -216,19 +242,18 @@ export async function POST(req: NextRequest) {
       // DB가 멈춰도(무료 플랜 일시정지 등) 손님 신청은 잃지 않는다: 메일로 대신 받는다.
       // 2026-11-04 DB 일시정지 뒤 모든 신청이 500으로 사라진 일의 교훈.
       console.error("Supabase insert 실패 → 메일로 대체 접수:", error);
-      await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true });
+      await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true, flags });
       return NextResponse.json({ ok: true, stored: "email" });
     }
   } catch (err) {
     console.error("Supabase 연결 실패 → 메일로 대체 접수:", err);
-    await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true });
+    await notifyOwner(data, { unverified: captchaUnverified, dbFailed: true, flags });
     return NextResponse.json({ ok: true, stored: "email" });
   }
 
-  // 7) 정상 건만 알림 메일 (의심 건은 저장만, 알림 없음)
-  if (status === "정상") {
-    await notifyOwner(data, { unverified: captchaUnverified });
-  }
+  // 7) 알림 메일. 의심 건도 보내되 제목에 [의심:사유]를 붙인다(2026-11-17).
+  // 예전엔 의심 건은 저장만 하고 알리지 않았는데, 참고 매장 주소를 적은 진짜 손님도 "link"로 걸려 묻힐 수 있었다.
+  await notifyOwner(data, { unverified: captchaUnverified, flags: status === "정상" ? [] : flags });
 
   return NextResponse.json({ ok: true });
 }

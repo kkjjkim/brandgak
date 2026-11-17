@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { ChoiceChips } from "@/components/home/choice-chips";
 import { ConsentNotice } from "@/components/home/consent-notice";
 import { readSource } from "@/lib/attribution";
-import { site } from "@/lib/site";
+import { SIZE_OPTIONS, START_TIMING, WORK_TYPES } from "@/lib/leads";
+import { CTA_LABEL, site } from "@/lib/site";
 import { track } from "@/lib/track";
 import { useTurnstile } from "@/lib/use-turnstile";
 import { cn } from "@/lib/utils";
@@ -20,21 +21,24 @@ const LABEL = "text-[13px] font-normal text-[#555]";
 const LINE =
   "h-auto border-0 border-b border-input bg-transparent px-0 py-2.5 text-[15px] placeholder:text-[#999] focus-visible:border-foreground focus-visible:shadow-[0_1px_0_0_hsl(var(--foreground))] focus-visible:ring-0";
 
-// 홈 신청 폼 (2026-11-10 지시서 9번, B안에서 평수·예산 칸을 뺐다). 서버는 기존 /api/leads 그대로 쓴다.
-// 새 칸(오픈 예정·하고 싶은 가게·동의 기록)은 message 에 합쳐 보내 DB 스키마를 바꾸지 않는다.
+// 홈 신청 폼. 서버는 기존 /api/leads 그대로 쓴다.
+// 2026-11-17: "인테리어 상담" 폼으로 바꿨다. 공사 구분·평수·시작 시기를 칩으로 묻는다 —
+// 막연한 "컨셉 상담"(장사·매출 고민 등)이 아니라 공사를 앞둔 문의가 들어오게.
+// 새 칸은 message 에 합쳐 보내 DB 스키마를 바꾸지 않는다.
 const INDUSTRIES = ["카페", "식당", "뷰티", "리테일", "기타"] as const;
-const OPEN_TIMING = ["3개월 안", "6개월 안", "미정"] as const;
 
 type Form = {
   name: string;
   phone: string;
+  workType: string;
   industry: string;
+  size: string;
   region: string;
-  openTiming: string;
+  start: string;
   dream: string;
 };
 
-const initial: Form = { name: "", phone: "", industry: "", region: "", openTiming: "", dream: "" };
+const initial: Form = { name: "", phone: "", workType: "", industry: "", size: "", region: "", start: "", dream: "" };
 
 // 같은 분석 흐름을 이어 보려고 예전 홈 폼과 같은 form_type 을 쓴다.
 const FORM_TYPE = "direct";
@@ -42,8 +46,10 @@ const FORM_TYPE = "direct";
 function buildMessage(f: Form) {
   const when = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
   return [
-    f.openTiming && `[오픈 예정] ${f.openTiming}`,
-    f.dream.trim() && `[어떤 가게를 열고 싶으세요?] ${f.dream.trim()}`,
+    f.workType && `[공사 구분] ${f.workType}`,
+    f.size && `[평수] ${f.size}`,
+    f.start && `[공사 시작 희망] ${f.start}`,
+    f.dream.trim() && `[원하는 분위기·참고 매장] ${f.dream.trim()}`,
     `[동의] 개인정보 수집·이용(필수), 시공사 제공(필수) — (주)디자인드비 등 브랜드각 협력 시공사 · ${when}`,
   ]
     .filter(Boolean)
@@ -172,17 +178,21 @@ export function ApplyForm() {
         </div>
       </div>
 
+      <ChoiceChips name="work_type" legend="공사 구분" options={WORK_TYPES} value={form.workType} onChange={(v) => set("workType", v)} />
+
       <ChoiceChips name="industry" legend="업종" options={INDUSTRIES} value={form.industry} onChange={(v) => set("industry", v)} />
+
+      <ChoiceChips name="size" legend="평수" options={SIZE_OPTIONS} value={form.size} onChange={(v) => set("size", v)} />
 
       <div className="grid gap-1.5">
         <Label htmlFor="apply-region" className={LABEL}>지역</Label>
         <Input id="apply-region" name="region" autoComplete="address-level2" value={form.region} onChange={(e) => set("region", e.target.value)} placeholder="예: 서울 성수동" className={LINE} />
       </div>
 
-      <ChoiceChips name="open_timing" legend="오픈 예정" options={OPEN_TIMING} value={form.openTiming} onChange={(v) => set("openTiming", v)} />
+      <ChoiceChips name="start" legend="공사 시작 희망" options={START_TIMING} value={form.start} onChange={(v) => set("start", v)} />
 
       <div className="grid gap-1.5">
-        <Label htmlFor="apply-dream" className={LABEL}>어떤 가게를 열고 싶으세요? (선택)</Label>
+        <Label htmlFor="apply-dream" className={LABEL}>원하는 분위기나 참고하는 매장 (선택)</Label>
         <Textarea
           id="apply-dream"
           name="dream"
@@ -190,7 +200,7 @@ export function ApplyForm() {
           maxLength={700}
           value={form.dream}
           onChange={(e) => set("dream", e.target.value)}
-          placeholder="한 줄이면 충분합니다"
+          placeholder="예: 원목에 밝은 톤, 오래 머무는 카페"
           className={cn(LINE, "min-h-[46px] resize-y py-2.5")}
         />
       </div>
@@ -229,9 +239,9 @@ export function ApplyForm() {
 
       <div className="mt-1">
         <Button type="submit" className="h-auto w-full py-[15px] text-[15px] font-semibold hover:bg-primary/85" disabled={loading}>
-          {loading ? "보내는 중…" : "무료 상담 신청"}
+          {loading ? "보내는 중…" : CTA_LABEL}
         </Button>
-        <p className="mt-2 text-center text-[13px] text-muted-foreground">영업일 하루 안에 경영지도사가 직접 전화드립니다.</p>
+        <p className="mt-2 text-center text-[13px] text-muted-foreground">상담은 무료입니다. 영업일 하루 안에 직접 전화드립니다.</p>
       </div>
     </form>
   );

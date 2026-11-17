@@ -4,6 +4,7 @@ import { PortfolioCard } from "@/components/portfolio-card";
 import { JsonLd } from "@/components/json-ld";
 import { breadcrumbLd } from "@/lib/seo";
 import { BUILDER, PORTFOLIO } from "@/lib/portfolio";
+import { CTA_LABEL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "시공 사례 — 직접 시공한 매장 8곳",
@@ -29,12 +30,12 @@ export default function PortfolioPage() {
         </ul>
 
         <div className="mt-12 max-w-sm border-t border-border pt-8 md:mt-20">
-          <p className="text-[20px] font-bold tracking-[-0.02em]">어떤 가게를 준비하세요?</p>
+          <p className="text-[20px] font-bold tracking-[-0.02em]">어떤 매장을 준비하세요?</p>
           <Link
             href="/#apply"
             className="mt-5 block bg-primary py-[15px] text-center text-[15px] font-semibold text-primary-foreground hover:bg-primary/85"
           >
-            무료 상담 신청
+            {CTA_LABEL}
           </Link>
         </div>
       </section>

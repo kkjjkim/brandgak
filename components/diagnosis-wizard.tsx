@@ -155,14 +155,16 @@ export function DiagnosisWizard({
         id="apply"
         className="mt-10 scroll-mt-20 rounded-xl border border-primary/40 bg-card p-7 md:p-9"
       >
-        <Eyebrow>무료 상담</Eyebrow>
+        {/* 2026-11-17: 이 상자는 "인테리어 상담"만 받는다. 예전 "진단 결과를 두고 봐드립니다"는
+            매출 고민 같은 일반 상담까지 받아 대표가 '무료 컨셉 상담'을 해야 하는 상황이 됐다. */}
+        <Eyebrow>인테리어 상담</Eyebrow>
         <h3 className="mt-4 font-display text-2xl font-semibold leading-snug md:text-3xl">
-          진단 결과를 두고 더 구체적으로 봐드립니다
+          매장 인테리어를 준비 중이시면
         </h3>
         <p className="mt-4 leading-relaxed text-muted-foreground">
-          위 내용은 일반적인 원칙입니다. 실제로는 자리·예산·업종에 따라 답이
-          달라집니다. 답해주신 내용은 아래에 이미 담겨 있으니 연락처만
-          남겨주시면 됩니다. 영업일 하루 안에 경영지도사가 직접 전화드립니다.
+          브랜드각은 매장 인테리어를 디자인하고 시공합니다. 공사를 앞두고
+          계시면 연락처만 남겨주세요. 답해주신 내용은 함께 전달되고, 영업일
+          하루 안에 직접 전화드립니다. 상담은 무료입니다.
         </p>
 
         <div className="mt-8">
