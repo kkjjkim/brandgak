@@ -105,9 +105,9 @@ async function notifyOwner(
       ["이름", lead.name],
       ["연락처", lead.phone],
       ["업종", lead.industry],
-      ["위치·평수", lead.location],
+      ["지역", lead.location],
       ["예산대", lead.budget],
-      ["하고 싶은 가게", lead.message],
+      ["신청 내용", lead.message],
       ["유입", lead.source],
     ]
       .filter(([, v]) => v)
@@ -119,7 +119,7 @@ async function notifyOwner(
       from,
       to: to.split(",").map((s) => s.trim()),
       // 제목은 HTML이 아니라 이스케이프 불필요. 줄바꿈만 제거(헤더 삽입 방지).
-      subject: `${opts.flags?.length ? `[의심:${opts.flags.join(",")}] ` : ""}${opts.dbFailed ? "[DB 미저장·메일만] " : ""}${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 인테리어 상담] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
+      subject: `${opts.flags?.length ? `[의심:${opts.flags.join(",")}] ` : ""}${opts.unverified ? "[캡차 미확인] " : ""}[${site.mailTag} · 인테리어 상담] ${String(lead.name).replace(/[\r\n]+/g, " ")} (${lead.phone})`,
       html: `<h2>[${site.mailTag}] 새 인테리어 상담 신청</h2><table cellpadding="6">${rows}</table>`,
     });
   } catch (err) {
